@@ -7,8 +7,8 @@ def home(request) -> HttpResponse:
 
 
 def about(request) -> HttpResponse:
-    return HttpResponse("I'm ate About")
+    return render(request, 'recipes/about.html')
 
 
 def contact(request) -> HttpResponse:
-    return HttpResponse("I'm at Contact")
+    return render(request, 'recipes/contato.html')
