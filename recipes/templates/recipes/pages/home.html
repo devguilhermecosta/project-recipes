@@ -2,27 +2,15 @@
 
 <body>
     <!-- nav -->
-    <nav class="nav-container">
-        <div class="container-menu-mobile">
-            <span class="material-icons flex-center menu">menu</span>
-        </div>
-        <div class="container-options-menu">
-            <ul class="list-menu">
-                <li><a href="/">Item 1</a></li>
-                <li><a href="/">Item 2</a></li>
-                <li><a href="/">Item 3</a></li>
-                <li><a href="/">Item 4</a></li>
-            </ul>
-        </div>
-    </nav>
-    <!-- header -->
-    <header>
-        <div class="container-header flex-center">
-            <span class="material-icons icon-header">flatware</span>
-            <h1 class="title-header">Recipes</h1>
-        </div>
-    </header>
+    {% include "recipes/partials/nav.html" %}
 
+    <!-- header -->
+    {% include "recipes/partials/header.html" %}
+
+    <!-- input of search -->
+    {% include "recipes/partials/search.html" %}
+
+    <!-- script -->
     <script>
         const navBar = document.querySelector(".nav-container");
         const menuMobile = document.querySelector(".container-menu-mobile");
