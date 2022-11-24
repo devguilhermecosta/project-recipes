@@ -300,6 +300,7 @@
             padding: 35px 25px;
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
         }
 
         .footer a {
@@ -309,6 +310,12 @@
 
         .footer a:hover {
             filter: brightness(0.8);
+        }
+
+        @media screen and (max-width: 360px) {
+            .footer a {
+                margin: 0 auto;
+            }
         }
 
     </style>
