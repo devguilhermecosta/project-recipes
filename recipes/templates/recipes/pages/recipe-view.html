@@ -1,29 +1,7 @@
-{% load static %}
+{% extends 'global/base.html' %}
 
-{% include "recipes/partials/head.html" %}
-
-<body>
-    <!-- nav -->
-    {% include "recipes/partials/nav.html" %}
-
-    <!-- header -->
-    {% include "recipes/partials/header.html" %}
-
-    <!-- input of search -->
-    {% include "recipes/partials/search.html" %}
-
-    <!-- main -->
-    <main class="main-content-container">
-        <div class="main-content main-content-list">
-            {% include "recipes/partials/recipe.html" %}
-        </div>
-    </main>
-
-    <!-- footer -->
-    {% include "recipes/partials/footer.html" %}
-
-    <!-- script -->
-    <script src="{% static "recipes/js/script.js" %}"></script>
-
-</body>
-</html>
+{% block content %}
+<div class="main-content main-content-list">
+    {% include "recipes/partials/individual-recipe-view.html" %}
+</div>
+{% endblock content %}

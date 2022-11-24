@@ -1,0 +1,27 @@
+{% load static %}
+
+{% include "recipes/partials/head.html" %}
+
+<body>
+    <!-- nav -->
+    {% include "recipes/partials/nav.html" %}
+
+    <!-- header -->
+    {% include "recipes/partials/header.html" %}
+
+    <!-- input of search -->
+    {% include "recipes/partials/search.html" %}
+
+    <!-- main -->
+    <main class="main-content-container">
+        {% block content %}{% endblock content %}
+    </main>
+
+    <!-- footer -->
+    {% include "recipes/partials/footer.html" %}
+
+    <!-- script -->
+    <script src="{% static "recipes/js/script.js" %}"></script>
+
+</body>
+</html>
