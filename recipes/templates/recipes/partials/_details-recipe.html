@@ -1,9 +1,13 @@
 <!-- image card -->
-<img class="card-image" src="{{ recipe.cover.url }}" alt="temp image">
+<a href="{% url 'recipes:recipe' recipe.id %}">
+    <img class="card-image" src="{{ recipe.cover.url }}" alt="temp image">
+</a>
 
 <!-- section box-card-info -->
 <section class="box-card-info">
-    <h2 class="card-title">{{ recipe.title }}</h2>
+    <a href="{% url 'recipes:recipe' recipe.id %}">
+        <h2 class="card-title">{{ recipe.title }}</h2>
+    </a>
     <div class="card-details">
         <!-- user -->
         <div>
@@ -13,7 +17,7 @@
         <!-- data -->
         <div>
             <span class="material-icons card-calendar-icon">&#xebcc</span>
-            <span class="card-date">{{ recipe.created_at|date:"d-m-Y" }} às {{ recipe.created_at|date:"H:i" }}</span>
+            <span class="card-date">{{ recipe.created_at|date:"d/m/Y" }} às {{ recipe.created_at|date:"H:i" }}</span>
         </div>
         <!-- group -->
         <div>
@@ -41,12 +45,20 @@
     </div>
 </section>
 
-<!-- footer card-recipes -->
-<footer class="card-footer">
-    <div class="card-footer-details">
-        <a href="/recipes/3/">
-            <span class="material-icons">&#xe8f4</span>
-            <h4>veja mais...</h4>
-        </a>
+{% if recipe_details is not True %}
+    <!-- footer card-recipes -->
+    <footer class="card-footer">
+        <div class="card-footer-details">
+            <a href="{% url 'recipes:recipe' recipe.id %}">
+                <span class="material-icons">&#xe8f4</span>
+                <h4>veja mais...</h4>
+            </a>
+        </div>
+    </footer>
+{% endif %}
+
+{% if recipe_description %}
+    <div class="card-preparation-steps">
+        {{ recipe.preparation_steps }}
     </div>
-</footer>
+{% endif %}
