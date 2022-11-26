@@ -40,7 +40,12 @@ def make_recipe(number: int):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=65)
+    name = models.CharField(max_length=65,
+                            verbose_name='Nome',
+                            )
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class Recipe(models.Model):
