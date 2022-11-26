@@ -70,3 +70,6 @@ class Recipe(models.Model):
                                on_delete=models.SET_NULL,
                                null=True,
                                )
+
+    def __str__(self) -> str:
+        return self.title
