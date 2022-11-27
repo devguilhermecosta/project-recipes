@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from . models import make_recipe
+from . models import make_recipe, Recipe
 
 
 def home(request) -> render:
+    recipes: object = Recipe.objects.all().order_by('-id')
     return render(request, 'recipes/pages/home.html', context={
-        'recipes': [make_recipe(i) for i in range(10)],
+        'recipes': recipes,
     })
 
 

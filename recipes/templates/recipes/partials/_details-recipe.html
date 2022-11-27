@@ -1,7 +1,9 @@
 <!-- image card -->
-<a href="{% url 'recipes:recipe' recipe.id %}">
-    <img class="card-image" src="{{ recipe.cover.url }}" alt="temp image">
-</a>
+{% if recipe.cover %}
+    <a href="{% url 'recipes:recipe' recipe.id %}">
+        <img class="card-image" src="{{ recipe.cover.url }}" alt="temp image">
+    </a>
+{% endif %}
 
 <!-- section box-card-info -->
 <section class="box-card-info">
@@ -12,7 +14,11 @@
         <!-- user -->
         <div>
             <span class="material-icons card-user-icon">person</span>
-            <span class="card-username">{{ recipe.author.first_name }} {{recipe.author.last_name}}</span>
+            {% if recipe.author.first_name %}
+                <span class="card-username">{{ recipe.author.first_name }} {{recipe.author.last_name}}</span>
+            {% else %}
+                <span class="card-username">{{ recipe.author.username }}</span>
+            {% endif %}
         </div>
         <!-- data -->
         <div>
