@@ -26,10 +26,14 @@
             <span class="card-date">{{ recipe.created_at|date:"d/m/Y" }} às {{ recipe.created_at|date:"H:i" }}</span>
         </div>
         <!-- group -->
-        <div>
-            <span class="material-icons">bookmark</span>
-            <span class="card-group">{{ recipe.category.name }}</span>
-        </div>
+        {% if recipe.category.id %}
+            <a href="{% url 'recipes:category' recipe.category.id %}">
+                <div>
+                    <span class="material-icons">bookmark</span>
+                    <span class="card-group">{{ recipe.category.name }}</span>
+                </div>
+            </a>
+        {% endif %}
         <!-- text -->
         <div class="prev-text-card">
             <p>{{ recipe.description }}</p>

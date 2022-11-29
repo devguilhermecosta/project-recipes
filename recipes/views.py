@@ -23,6 +23,6 @@ def recipe(request, id) -> render:
 def category(request, id) -> render:
     recipe: Recipe = Recipe.objects.filter(category__id=id).order_by('-id')
     
-    return render(request, 'recipes/pages/home.html', context={
+    return render(request, 'recipes/pages/category.html', context={
         'recipes': recipe,
     })
