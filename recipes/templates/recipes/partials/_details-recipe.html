@@ -12,14 +12,16 @@
     </a>
     <div class="card-details">
         <!-- user -->
-        <div>
-            <span class="material-icons card-user-icon">person</span>
-            {% if recipe.author.first_name %}
-                <span class="card-username">{{ recipe.author.first_name }} {{recipe.author.last_name}}</span>
-            {% else %}
-                <span class="card-username">{{ recipe.author.username }}</span>
-            {% endif %}
-        </div>
+        {% if recipe.author is not None %}
+            <div>
+                <span class="material-icons card-user-icon">person</span>
+                {% if recipe.author.first_name %}
+                    <span class="card-username">{{ recipe.author.first_name }} {{recipe.author.last_name}}</span>
+                {% else %}
+                    <span class="card-username">{{ recipe.author.username }}</span>
+                {% endif %}
+            </div>
+        {% endif %}
         <!-- data -->
         <div>
             <span class="material-icons card-calendar-icon">&#xebcc</span>
