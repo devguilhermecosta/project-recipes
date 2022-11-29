@@ -11,13 +11,13 @@ def home(request) -> render:
 
 
 def recipe(request, id) -> render:
-    recipe: object = Recipe.objects.filter(pk=id).order_by('-id')
+    recipe: object = Recipe.objects.filter(pk=id).order_by('-id').first()
 
     return render(request, 'recipes/pages/recipe-view.html', context={
         'recipe_details': True,
         'recipe_description': True,
-        'title_recipe': f"{recipe.first().title}",
-        'recipe': recipe.first(),
+        'title_recipe': f"{recipe.title}",
+        'recipe': recipe,
     })
     
 
