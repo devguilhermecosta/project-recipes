@@ -3,7 +3,7 @@ from . models import Recipe
 
 
 def home(request) -> render:
-    recipes: object = Recipe.objects.filter(is_published=True).order_by('-id')
+    recipes: list = get_object_or_404(Recipe, is_published=True)
 
     return render(request, 'recipes/pages/home.html', context={
         'recipes': recipes,
