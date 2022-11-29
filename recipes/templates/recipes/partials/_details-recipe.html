@@ -71,6 +71,10 @@
 
 {% if recipe_description %}
     <div class="card-preparation-steps">
-        {{ recipe.preparation_steps }}
+        {% if recipe.preparation_steps_is_html %}
+            {{ recipe.preparation_steps|safe }}
+        {% else %}
+            {{ recipe.preparation_steps }}
+        {% endif %}
     </div>
 {% endif %}
