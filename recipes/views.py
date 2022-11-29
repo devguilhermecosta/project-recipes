@@ -18,3 +18,11 @@ def recipe(request, id) -> render:
         'recipe_description': True,
         'recipe': recipe.first(),
     })
+    
+
+def category(request, id) -> render:
+    recipe: Recipe = Recipe.objects.filter(category__id=id).order_by('-id')
+    
+    return render(request, 'recipes/pages/home.html', context={
+        'recipes': recipe,
+    })
