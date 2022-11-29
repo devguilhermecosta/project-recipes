@@ -1,0 +1,76 @@
+<!-- image card -->
+{% if recipe.cover %}
+    <a href="{% url 'recipes:recipe' recipe.id %}">
+        <img class="card-image" src="{{ recipe.cover.url }}" alt="temp image">
+    </a>
+{% endif %}
+
+<!-- section box-card-info -->
+<section class="box-card-info">
+    <a href="{% url 'recipes:recipe' recipe.id %}">
+        <h2 class="card-title">{{ recipe.title }}</h2>
+    </a>
+    <div class="card-details">
+        {% if recipe.author is not None %}
+        <!-- user -->
+        <div>
+            <span class="material-icons card-user-icon">person</span>
+            {% if recipe.author.first_name %}
+                <span class="card-username">{{ recipe.author.first_name }} {{recipe.author.last_name}}</span>
+            {% else %}
+                <span class="card-username">{{ recipe.author.username }}</span>
+            {% endif %}
+        </div>
+        {% endif %}
+        <!-- data -->
+        <div>
+            <span class="material-icons card-calendar-icon">&#xebcc</span>
+            <span class="card-date">{{ recipe.created_at|date:"d/m/Y" }} às {{ recipe.created_at|date:"H:i" }}</span>
+        </div>
+        <!-- group -->
+        {% if recipe.category is not None %}
+            <div>
+                <a href="{% url 'recipes:category' recipe.category.id %}" class="flex-detail">
+                    <span class="material-icons">bookmark</span>
+                    <span class="card-group">{{ recipe.category.name }}</span>
+                </a>
+            </div>
+        {% endif %}
+        <!-- text -->
+        <div class="prev-text-card">
+            <p>{{ recipe.description }}</p>
+        </div>
+    </div>
+</section>
+
+<!-- section recipe preparation -->
+<section class="box-card-preparation">
+    <!-- time of preparation -->
+    <div class="card-time-preparation">
+        <h3><span class="material-icons">&#xe8b5</span>Preparo</h3>
+        <p>{{ recipe.preparation_time }} {{ recipe.preparation_time_unit }}</p>
+    </div>
+    <!-- portions -->
+    <div class="card-portion">
+        <h3><span class="material-icons">&#xe552</span>Porções</h3>
+        <p>{{ recipe.servings }} {{ recipe.servings_unit }}</p>
+    </div>
+</section>
+
+{% if recipe_details is not True %}
+    <!-- footer card-recipes -->
+    <footer class="card-footer">
+        <div class="card-footer-details">
+            <a href="{% url 'recipes:recipe' recipe.id %}">
+                <span class="material-icons">&#xe8f4</span>
+                <h4>veja mais...</h4>
+            </a>
+        </div>
+    </footer>
+{% endif %}
+
+{% if recipe_description %}
+    <div class="card-preparation-steps">
+        {{ recipe.preparation_steps }}
+    </div>
+{% endif %}
