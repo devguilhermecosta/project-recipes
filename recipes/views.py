@@ -16,6 +16,7 @@ def recipe(request, id) -> render:
     return render(request, 'recipes/pages/recipe-view.html', context={
         'recipe_details': True,
         'recipe_description': True,
+        'title_recipe': f"{recipe.first().title}",
         'recipe': recipe.first(),
     })
     
@@ -27,4 +28,5 @@ def category(request, id) -> render:
     
     return render(request, 'recipes/pages/category.html', context={
         'recipes': recipe,
+        'title': f"{recipe[0].category.name} - Category",
     })
