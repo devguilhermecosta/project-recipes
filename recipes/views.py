@@ -1,17 +1,20 @@
-from django.shortcuts import render, get_list_or_404
+from django.shortcuts import render, get_list_or_404, get_object_or_404
 from . models import Recipe
 
 
 def home(request) -> render:
-    recipes: object = Recipe.objects.all().order_by('-id')
+    recipes: object = Recipe.objects.filter(is_published=True).order_by('-id')
 
     return render(request, 'recipes/pages/home.html', context={
         'recipes': recipes,
     })
 
 
-def recipe(request, id) -> render:
-    recipe: object = Recipe.objects.filter(pk=id).order_by('-id').first()
+def recipe(request, id) -> render:   
+    recipe: list = get_object_or_404(Recipe,
+                                     pk=id,
+                                     is_published=True,
+                                     )
 
     return render(request, 'recipes/pages/recipe-view.html', context={
         'recipe_details': True,
