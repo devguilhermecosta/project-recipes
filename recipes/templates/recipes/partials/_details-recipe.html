@@ -27,12 +27,12 @@
         </div>
         <!-- group -->
         {% if recipe.category.id %}
-            <a href="{% url 'recipes:category' recipe.category.id %}">
-                <div>
+            <div>
+                <a href="{% url 'recipes:category' recipe.category.id %}" class="flex-details">
                     <span class="material-icons">bookmark</span>
                     <span class="card-group">{{ recipe.category.name }}</span>
-                </div>
-            </a>
+                </a>
+            </div>
         {% endif %}
         <!-- text -->
         <div class="prev-text-card">

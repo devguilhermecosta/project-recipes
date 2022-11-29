@@ -236,6 +236,7 @@ header > a {
 }
 
 .card-details > .prev-text-card {
+    width: 100%;
     margin-top: 20px;
     font-size: 16px;
     font-style: normal;
@@ -247,6 +248,10 @@ header > a {
     margin-right: 20px;
 }
 
+.flex-details {
+    display: flex;
+    align-items: center;
+}
 
 .card-group {
     cursor: pointer;
