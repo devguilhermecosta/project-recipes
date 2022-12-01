@@ -1,12 +1,11 @@
-from django.test import TestCase
 from django.shortcuts import HttpResponse
 from django.urls import reverse, resolve, ResolverMatch
 from recipes import views
-from recipes.models import Recipe, Category
-from django.contrib.auth.models import User
+from recipes.models import Recipe
+from .test_recipe_base import RecipeTestBase
 
 
-class RecipesViewsTest(TestCase):
+class RecipesViewsTest(RecipeTestBase):
     def test_recipes_home_view_loads_correct_template(self) -> None:
         response: HttpResponse = self.client.get(
             reverse('recipes:home')
@@ -35,30 +34,9 @@ class RecipesViewsTest(TestCase):
         self.assertIs(view.func, views.home)
 
     def test_recipe_home_template_loads_recipes(self) -> None:
-        category: Category = Category.objects.create(name='Categoria')
-
-        author: User = User.objects.create_user(
-            first_name='first name',
-            last_name='last name',
-            username='username',
-            password='123456',
-            email='username@email.com',
-        )
-
-        recipe: Recipe = Recipe.objects.create(
-            title='Recipe title',
-            description='Recipe Description',
-            slug='Recipe Slug',
-            preparation_time=30,
-            preparation_time_unit='Minutos',
-            servings=5,
-            servings_unit='Porções',
-            preparation_steps='Preparation Steps',
-            is_published=True,
-            category=category,
-            author=author,
-        )
-
+        recipe: Recipe = self.make_recipe(category={
+            'name': 'Café da Manhã',
+        })
         response: HttpResponse = self.client.get(
             reverse('recipes:home')
         )
@@ -67,7 +45,6 @@ class RecipesViewsTest(TestCase):
 
         self.assertEqual(response_context_length, 1)
         self.assertIn(recipe.title, response_content)
-        self.assertIn(recipe.description, response_content)
 
     def test_recipe_details_view_is_correct(self) -> None:
         view: ResolverMatch = resolve(
