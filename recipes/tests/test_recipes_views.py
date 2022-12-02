@@ -34,9 +34,7 @@ class RecipesViewsTest(RecipeTestBase):
         self.assertIs(view.func, views.home)
 
     def test_recipe_home_template_loads_recipes(self) -> None:
-        recipe: Recipe = self.make_recipe(category={
-            'name': 'Café da Manhã',
-        })
+        recipe: Recipe = self.make_recipe()
         response: HttpResponse = self.client.get(
             reverse('recipes:home')
         )
@@ -59,6 +57,21 @@ class RecipesViewsTest(RecipeTestBase):
 
         self.assertEqual(response.status_code, 404)
 
+    def test_recipe_details_template_loads_the_correct_recipe(self) -> None:
+        needed_title: str = 'Title for test of recipe details'
+
+        self.make_recipe(title=needed_title)
+
+        response: HttpResponse = self.client.get(
+            reverse('recipes:recipe', kwargs={
+                'id': 1,
+            })
+        )
+
+        content: str = response.content.decode('utf-8')
+
+        self.assertIn(needed_title, content)
+
     def test_recipe_category_view_is_correct(self) -> None:
         view: ResolverMatch = resolve(
             reverse('recipes:category', args=(1,))
@@ -72,3 +85,15 @@ class RecipesViewsTest(RecipeTestBase):
         )
 
         self.assertEqual(response.status_code, 404)
+
+    def test_recipe_category_template_loads_the_correct_recipe(self) -> None:
+        needed_title: str = 'This is a title for the test of category'
+        self.make_recipe(title=needed_title)
+
+        response: HttpResponse = self.client.get(
+            reverse('recipes:category', kwargs={'id': 1})
+        )
+
+        content: str = response.content.decode('utf-8')
+
+        self.assertIn(needed_title, content)
