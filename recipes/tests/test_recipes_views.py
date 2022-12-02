@@ -27,6 +27,16 @@ class RecipesViewsTest(RecipeTestBase):
 
         self.assertEqual(response.status_code, 200)
 
+    def test_recipe_home_dont_show_recipes_not_published(self) -> None:
+        self.make_recipe(is_published=False)
+
+        response: HttpResponse = self.client.get(
+            reverse('recipes:home')
+        )
+        content: str = response.content.decode('utf-8')
+
+        self.assertIn('No recipe found', content)
+
     def test_recipe_home_view_is_correct(self) -> None:
         view: ResolverMatch = resolve(
             reverse('recipes:home')
@@ -53,6 +63,17 @@ class RecipesViewsTest(RecipeTestBase):
     def test_recipe_details_return_404_if_no_recipes_found(self) -> None:
         response: HttpResponse = self.client.get(
             reverse('recipes:recipe', kwargs={'id': 10000})
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_recipe_details_dont_loads_recipe_not_published(self) -> None:
+        recipe: Recipe = self.make_recipe(is_published=False)
+
+        response: HttpResponse = self.client.get(
+            reverse('recipes:recipe', kwargs={
+                'id': recipe.id,
+            })
         )
 
         self.assertEqual(response.status_code, 404)
@@ -97,3 +118,14 @@ class RecipesViewsTest(RecipeTestBase):
         content: str = response.content.decode('utf-8')
 
         self.assertIn(needed_title, content)
+
+    def test_recipe_category_dont_load_recipe_not_published(self) -> None:
+        recipe: Recipe = self.make_recipe(is_published=False)
+
+        response: HttpResponse = self.client.get(
+            reverse('recipes:recipe', kwargs={
+                'id': recipe.category.id,
+            })
+        )
+
+        self.assertEqual(response.status_code, 404)
