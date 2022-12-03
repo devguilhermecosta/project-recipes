@@ -28,7 +28,7 @@ class RecipeTestBase(TestCase):
     def make_recipe(self,
                     title='Recipe title',
                     description='Recipe Description',
-                    slug='Recipe Slug',
+                    slug='recipe-slug',
                     preparation_time=30,
                     preparation_time_unit='Minutos',
                     servings=5,
