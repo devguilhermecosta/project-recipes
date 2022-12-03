@@ -34,7 +34,6 @@ class RecipeTestModel(RecipeTestBase):
         ('description', 165),
         ('preparation_time_unit', 165),
         ('servings_unit', 65),
-        ('slug', 65)
     ])
     def test_recipes_fields_max_length(self, field, max_length) -> None:
         setattr(self.recipe, field, 'A' * (max_length + 1))
@@ -50,3 +49,10 @@ class RecipeTestModel(RecipeTestBase):
         recipe = self.make_recipe_no_defaults()
 
         self.assertFalse(recipe.is_published)
+
+    def test_recipe_string_representation_is_title_field(self) -> None:
+        self.recipe.title = 'Recipe title'
+        self.recipe.full_clean()
+        self.recipe.save()
+
+        self.assertEqual(str(self.recipe), 'Recipe title')
