@@ -33,3 +33,6 @@ def category(request, id) -> render:
         'recipes': recipe,
         'title': f"{recipe[0].category.name} - Category",
     })
+
+
+def search(self) -> render: ...

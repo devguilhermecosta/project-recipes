@@ -38,10 +38,10 @@ class RecipesViewsTest(RecipeTestBase):
         self.assertIn('No recipe found', content)
 
     def test_recipe_home_view_is_correct(self) -> None:
-        view: ResolverMatch = resolve(
+        url: ResolverMatch = resolve(
             reverse('recipes:home')
         )
-        self.assertIs(view.func, views.home)
+        self.assertIs(url.func, views.home)
 
     def test_recipe_home_template_loads_recipes(self) -> None:
         recipe: Recipe = self.make_recipe()
@@ -55,10 +55,10 @@ class RecipesViewsTest(RecipeTestBase):
         self.assertIn(recipe.title, response_content)
 
     def test_recipe_details_view_is_correct(self) -> None:
-        view: ResolverMatch = resolve(
+        url: ResolverMatch = resolve(
             reverse('recipes:recipe', kwargs={'id': 1},)
         )
-        self.assertIs(view.func, views.recipe)
+        self.assertIs(url.func, views.recipe)
 
     def test_recipe_details_return_404_if_no_recipes_found(self) -> None:
         response: HttpResponse = self.client.get(
@@ -94,11 +94,11 @@ class RecipesViewsTest(RecipeTestBase):
         self.assertIn(needed_title, content)
 
     def test_recipe_category_view_is_correct(self) -> None:
-        view: ResolverMatch = resolve(
+        url: ResolverMatch = resolve(
             reverse('recipes:category', args=(1,))
         )
 
-        self.assertIs(view.func, views.category)
+        self.assertIs(url.func, views.category)
 
     def test_recipe_category_return_404_if_no_category_found(self) -> None:
         response: HttpResponse = self.client.get(
@@ -129,3 +129,10 @@ class RecipesViewsTest(RecipeTestBase):
         )
 
         self.assertEqual(response.status_code, 404)
+
+    def test_recipe_view_search_loads_correct_view(self) -> None:
+        url: ResolverMatch = resolve(
+            reverse('recipes:search')
+        )
+
+        self.assertEqual(url.func, views.search)
