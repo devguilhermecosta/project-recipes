@@ -140,7 +140,7 @@ header > a {
 
 .button-search {
     position: absolute;
-    top: 4px;
+    top: 3px;
     right: 3px;
     cursor: pointer;
     background-color: var(--bg-input-search);
