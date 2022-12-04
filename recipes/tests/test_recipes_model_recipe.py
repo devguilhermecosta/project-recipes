@@ -1,5 +1,5 @@
 from .test_recipe_base import RecipeTestBase
-from recipes.models import Recipe, User
+from recipes.models import Recipe
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from parameterized import parameterized
