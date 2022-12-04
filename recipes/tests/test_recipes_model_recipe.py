@@ -1,6 +1,7 @@
 from .test_recipe_base import RecipeTestBase
-from recipes.models import Recipe
+from recipes.models import Recipe, User
 from django.core.exceptions import ValidationError
+from django.db.utils import IntegrityError
 from parameterized import parameterized
 
 
@@ -56,3 +57,16 @@ class RecipeTestModel(RecipeTestBase):
         self.recipe.save()
 
         self.assertEqual(str(self.recipe), 'Recipe title')
+
+    def test_recipe_field_slug_is_unique(self) -> None:
+        needed_text_slug: str = 'slug-recipe-test'
+        recipe: Recipe = self.make_recipe(slug=needed_text_slug,
+                                          author={'username': 'catarina'},
+                                          )
+        recipe.save()
+
+        with self.assertRaises(IntegrityError):
+            recipe2: Recipe = self.make_recipe(slug=needed_text_slug,
+                                               author={'username': 'cat'},
+                                               )
+            recipe2.save()
