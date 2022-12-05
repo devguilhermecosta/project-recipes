@@ -35,4 +35,5 @@ def category(request, id) -> render:
     })
 
 
-def search(self) -> render: ...
+def search(request) -> render:
+    return render(request, 'recipes/pages/search.html')
