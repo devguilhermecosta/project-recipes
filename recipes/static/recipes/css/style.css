@@ -75,14 +75,16 @@ header {
     background-color: black; 
 }
 
-header > a {
-    text-decoration: none;
-    color: var(--text-header-footer);
-}
-
 .container-header {
     padding: 25px 0;
     width: fit-content;
+}
+
+.container-header > a {
+    text-decoration: none;
+    color: var(--text-header-footer);
+    display: flex;
+    align-items: center;
 }
 
 .icon-header {
