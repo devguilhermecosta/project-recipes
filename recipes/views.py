@@ -13,10 +13,10 @@ def home(request) -> render:
 
 
 def recipe(request, id) -> render:
-    recipe: list = get_object_or_404(Recipe,
-                                     pk=id,
-                                     is_published=True,
-                                     )
+    recipe: Recipe = get_object_or_404(Recipe,
+                                       pk=id,
+                                       is_published=True,
+                                       )
 
     return render(request, 'recipes/pages/recipe-view.html', context={
         'recipe_details': True,

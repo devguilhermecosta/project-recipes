@@ -1,6 +1,7 @@
 from django.shortcuts import HttpResponse
 from django.urls import reverse, ResolverMatch
 from .test_recipe_base import RecipeTestBase
+from recipes.models import Recipe
 
 
 class RecipesSearchViewTest(RecipeTestBase):
@@ -26,3 +27,45 @@ class RecipesSearchViewTest(RecipeTestBase):
         self.assertIn('Buscando por &#x27;test&#x27',
                       response.content.decode('utf-8')
                       )
+
+    def test_recipe_search_can_find_recipe_by_title(self) -> None:
+        url: str = reverse('recipes:search')
+
+        title_one: str = 'Receita de bolo de fubá'
+        title_two: str = 'Receita de bolo de côco'
+
+        recipe_one: Recipe = self.make_recipe(title=title_one,
+                                              slug='one',
+                                              author={'username': 'adãosilva'},
+                                              )
+
+        recipe_two: Recipe = self.make_recipe(title=title_two,
+                                              slug='two',
+                                              author={'username': 'adãorosa'},
+                                              )
+
+        response_one: HttpResponse = self.client.get(
+            url + f"?q={recipe_one.title}"
+            )
+
+        response_two: HttpResponse = self.client.get(
+            url + '?q=' + f"{recipe_two.title}"
+        )
+
+        response_three: HttpResponse = self.client.get(
+            url + '?q=' + 'receita de qualquer coisa'
+        )
+
+        response_both: HttpResponse = self.client.get(
+            url + '?q=' + 'Receita de bolo'
+        )
+
+        self.assertIn(title_one, str(response_one.context['recipes']))
+        self.assertIn(title_two, str(response_two.context['recipes']))
+        self.assertIn('No recipe found',
+                      response_three.content.decode('utf-8')
+                      )
+        self.assertNotIn(title_one, str(response_two.context['recipes']))
+        self.assertNotIn(title_two, str(response_one.context['recipes']))
+        self.assertIn(title_one, str(response_both.context['recipes']))
+        self.assertIn(title_two, str(response_both.context['recipes']))
