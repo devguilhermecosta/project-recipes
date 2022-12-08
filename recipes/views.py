@@ -1,14 +1,31 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
-from django.http import Http404
+from django.http import Http404, HttpRequest
 from django.db.models import Q
+from django.core.paginator import Paginator
 from . models import Recipe
+from utils.pagination import make_pagination_range
 
 
-def home(request) -> render:
-    recipes: list = Recipe.objects.filter(is_published=True).order_by('-id')
+def home(request: HttpRequest) -> render:
+    recipes: list[object] = Recipe.objects.filter(is_published=True).order_by('-id')  # noqa: E501
+
+    paginator: Paginator = Paginator(recipes, 9)
+
+    try:
+        current_page: int = int(request.GET.get('page', 1))
+    except ValueError:
+        current_page = 1
+
+    page_object: Paginator = paginator.get_page(current_page)
+
+    pagination_range: dict = make_pagination_range(paginator.page_range,
+                                                   4,
+                                                   current_page,
+                                                   )
 
     return render(request, 'recipes/pages/home.html', context={
-        'recipes': recipes,
+        'recipes': page_object,
+        'pagination_range': pagination_range,
     })
 
 

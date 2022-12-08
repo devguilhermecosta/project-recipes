@@ -313,6 +313,39 @@ header {
     padding-right: 10px;
 }
 
+.pagination-container {
+    width: 100%;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.pagination-content {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 5px;
+}
+
+.page-link {
+    background-color: var(--bg-menu);
+}
+
+.page-item {
+    background-color: var(--bg-input-search);
+}
+
+.page-link, .page-item {
+    text-decoration: none;
+    padding: 8px 5px;
+    color: var(--text-card);
+}
+
+.current-page {
+    background-color: var(--bg-header-footer);
+    color: var(--bg-card-details);
+    font-style: bolder;
+}
+
 .footer {
     background-color: black;
     margin-top: 30px;
