@@ -86,3 +86,9 @@ class TestRecipePagination(TestCase):
         )['pagination']
 
         self.assertEqual([17, 18, 19, 20], pagination_3)
+
+    def test_fail(self) -> None:
+        self.fail('Fazer uma documentação de como criar uma paginação'
+                  'no Django e também fazer os testes do paginator'
+                  'e fazer o coverage'
+                  )
