@@ -8,15 +8,17 @@
 
             {% for page in pagination_range.pagination %}
                 {% if page == pagination_range.current_page %}
-                    <a  class="page-link current-page" href="?page={{ page }}">{{ page }}</a>
+                    <a  class="page-link current-page" href="?page={{ page }}{{ aditional_url }}">{{ page }}</a>
                 {% else %}
-                    <a  class="page-link" href="?page={{ page }}">{{ page }}</a>
+                    <a  class="page-link" href="?page={{ page }}{{ aditional_url }}">{{ page }}</a>
                 {% endif %}
             {% endfor %}
 
             {% if pagination_range.last_page_out_of_range %}
             <span class="page-item">...</span>
-            <a class="page-link" href="?page={{ pagination_range.total_pages }}">{{ pagination_range.total_pages }}</a>
+            <a class="page-link"
+            href="?page={{ pagination_range.total_pages }}{{ aditional_url }}">{{ pagination_range.total_pages }}
+            </a>
         {% endif %}
         </div>
     </div>

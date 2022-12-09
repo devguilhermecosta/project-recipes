@@ -1,27 +1,14 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.http import Http404, HttpRequest
 from django.db.models import Q
-from django.core.paginator import Paginator
 from . models import Recipe
-from utils.pagination import make_pagination_range
+from utils.pagination import make_pagination
 
 
 def home(request: HttpRequest) -> render:
     recipes: list[object] = Recipe.objects.filter(is_published=True).order_by('-id')  # noqa: E501
 
-    paginator: Paginator = Paginator(recipes, 9)
-
-    try:
-        current_page: int = int(request.GET.get('page', 1))
-    except ValueError:
-        current_page = 1
-
-    page_object: Paginator = paginator.get_page(current_page)
-
-    pagination_range: dict = make_pagination_range(paginator.page_range,
-                                                   4,
-                                                   current_page,
-                                                   )
+    page_object, pagination_range = make_pagination(request, recipes, 9, 4)
 
     return render(request, 'recipes/pages/home.html', context={
         'recipes': page_object,
@@ -44,13 +31,16 @@ def recipe(request, id) -> render:
 
 
 def category(request, id) -> render:
-    recipe: list = get_list_or_404(Recipe.objects.filter(category__id=id,
-                                                         is_published=True,
-                                                         ).order_by('-id'))
+    recipes: list = get_list_or_404(Recipe.objects.filter(category__id=id,
+                                                          is_published=True,
+                                                          ).order_by('-id'))
+
+    page_object, pagination_range = make_pagination(request, recipes, 9, 4)
 
     return render(request, 'recipes/pages/category.html', context={
-        'recipes': recipe,
-        'title': f"{recipe[0].category.name} - Category",
+        'recipes': page_object,
+        'pagination_range': pagination_range,
+        'title': f"{recipes[0].category.name} - Category",
     })
 
 
@@ -69,8 +59,12 @@ def search(request) -> render:
         is_published=True,
     ).order_by('-id')
 
+    page_object, pagination_range = make_pagination(request, recipes, 9, 4)
+
     return render(request, 'recipes/pages/search.html', context={
         'page_title': f"Buscando por '{search_term}'",
         'search_term': search_term,
-        'recipes': recipes,
+        'recipes': page_object,
+        'pagination_range': pagination_range,
+        'aditional_url': f'&q={search_term}',
     })

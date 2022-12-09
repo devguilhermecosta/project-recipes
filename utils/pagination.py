@@ -1,4 +1,6 @@
 import math
+from django.core.paginator import Paginator
+from django.http import HttpRequest
 
 
 def make_pagination_range(page_range: list[int],
@@ -32,3 +34,24 @@ def make_pagination_range(page_range: list[int],
         'first_page_out_of_range': current_page > middle_range,
         'last_page_out_of_range': stop_range < total_pages,
     }
+
+
+def make_pagination(request: HttpRequest,
+                    query_set: list[object],
+                    qty_objects: int,
+                    per_page: int = 4,
+                    ) -> Paginator:
+    paginator: Paginator = Paginator(query_set, qty_objects)
+
+    try:
+        current_page: int = int(request.GET.get('page', 1))
+    except ValueError:
+        current_page = 1
+
+    page_object: Paginator = paginator.get_page(current_page)
+
+    pagination_range: dict = make_pagination_range(paginator.page_range,
+                                                   per_page,
+                                                   current_page,
+                                                   )
+    return page_object, pagination_range
