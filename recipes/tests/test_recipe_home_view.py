@@ -53,9 +53,3 @@ class RecipesHomeViewTest(RecipeTestBase):
 
         self.assertEqual(response_context_length, 1)
         self.assertIn(recipe.title, response_content)
-
-    def test_recipe_home_view_returns_a_pagination(self) -> None:
-        response = resolve(
-            reverse('recipes:home')
-        )
-        ...
