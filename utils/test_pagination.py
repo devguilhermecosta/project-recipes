@@ -1,8 +1,13 @@
-from unittest import TestCase
+from django.test import Client
+from recipes.tests.test_recipe_base import RecipeTestBase
+from recipes.models import Recipe
 from utils.pagination import make_pagination_range
+from django.core.paginator import Page
+from django.urls import reverse
+from django.http import HttpResponse
 
 
-class TestRecipePagination(TestCase):
+class TestRecipePagination(RecipeTestBase):
     def test_make_pagination_range_returns_a_pagination_range(self) -> None:
         pagination: list[int] = make_pagination_range(
             page_range=list(range(1, 21)),
@@ -87,8 +92,50 @@ class TestRecipePagination(TestCase):
 
         self.assertEqual([17, 18, 19, 20], pagination_3)
 
-    def test_fail(self) -> None:
-        self.fail('Fazer uma documentação de como criar uma paginação'
-                  'no Django e também fazer os testes do paginator'
-                  'e fazer o coverage'
-                  )
+    def test_pagination_renders_no_recipe_found_if_no_recipes(self) -> None:
+        client: Client = Client()
+        response: HttpResponse = client.get(
+            reverse('recipes:home')
+        )
+        response_content: str = response.content.decode('utf-8')
+
+        self.assertIn('No recipe found', response_content)
+
+    def test_pagination_renders_correct_amount_of_recipes_per_page(self) -> None:  # noqa: E501
+        #  makes ten recipes
+        for i in range(10):
+            recipe: Recipe = self.make_recipe(title=f'title-recipes-test-{i}',  # noqa: F841 E501
+                                              slug=f'title-recipes-test{i}',
+                                              author={'username': f'adão{i}'},
+                                              )
+        client: Client = Client()
+        response: HttpResponse = client.get(
+            reverse('recipes:home')
+        )
+
+        response_context: Page = response.context['recipes']
+        objects_per_page: int = len(response_context.object_list)
+
+        self.assertEqual(objects_per_page, 9)
+
+    # def test_pagination_renders_correct_amount_of_recipes_per_page(self) -> None:  # noqa: E501
+    #     #  make ten recipes
+    #     for i in range(10):
+    #         recipe: Recipe = self.make_recipe(title=f'title-recipes-test-{i}',  # noqa: F841 E501
+    #                                           slug=f'title-recipes-test{i}',
+    #                                           author={'username': f'adão{i}'},  # noqa: E501
+    #                                           )
+    #     client: Client = Client()
+    #     response: HttpResponse = client.get(
+    #         reverse('recipes:home')
+    #     )
+
+    #     response_content: str = response.content.decode('utf-8')
+
+    #     amount_recipes_titles: int = 0
+
+    #     for title in response_content.split():
+    #         if 'title-recipes-test' in title:
+    #             amount_recipes_titles += 1
+
+    #     self.assertEqual(amount_recipes_titles, 9)

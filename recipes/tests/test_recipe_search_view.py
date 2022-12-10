@@ -1,5 +1,6 @@
 from django.shortcuts import HttpResponse
 from django.urls import reverse, ResolverMatch
+from django.core.paginator import Page
 from .test_recipe_base import RecipeTestBase
 from recipes.models import Recipe
 
@@ -47,10 +48,14 @@ class RecipesSearchViewTest(RecipeTestBase):
         response_one: HttpResponse = self.client.get(
             url + f"?q={recipe_one.title}"
             )
+        response_one_context: Page = response_one.context['recipes']
+        response_one_object: list = response_one_context.object_list
 
         response_two: HttpResponse = self.client.get(
             url + '?q=' + f"{recipe_two.title}"
         )
+        response_two_context: Page = response_two.context['recipes']
+        response_two_object: list = response_two_context.object_list
 
         response_three: HttpResponse = self.client.get(
             url + '?q=' + 'receita de qualquer coisa'
@@ -59,13 +64,15 @@ class RecipesSearchViewTest(RecipeTestBase):
         response_both: HttpResponse = self.client.get(
             url + '?q=' + 'Receita de bolo'
         )
+        response_both_context: Page = response_both.context['recipes']
+        response_both_objects: list = response_both_context.object_list
 
-        self.assertIn(title_one, str(response_one.context['recipes']))
-        self.assertIn(title_two, str(response_two.context['recipes']))
+        self.assertIn(title_one, str(response_one_object))
+        self.assertIn(title_two, str(response_two_object))
         self.assertIn('No recipe found',
                       response_three.content.decode('utf-8')
                       )
-        self.assertNotIn(title_one, str(response_two.context['recipes']))
-        self.assertNotIn(title_two, str(response_one.context['recipes']))
-        self.assertIn(title_one, str(response_both.context['recipes']))
-        self.assertIn(title_two, str(response_both.context['recipes']))
+        self.assertNotIn(title_one, str(response_two_object))
+        self.assertNotIn(title_two, str(response_one_object))
+        self.assertIn(title_one, str(response_both_objects))
+        self.assertIn(title_two, str(response_both_objects))
