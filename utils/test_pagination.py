@@ -104,10 +104,12 @@ class TestRecipePagination(RecipeTestBase):
     def test_pagination_renders_correct_amount_of_recipes_per_page(self) -> None:  # noqa: E501
         #  makes ten recipes
         for i in range(10):
-            recipe: Recipe = self.make_recipe(title=f'title-recipes-test-{i}',  # noqa: F841 E501
-                                              slug=f'title-recipes-test{i}',
-                                              author={'username': f'adão{i}'},
-                                              )
+            kwargs: dict = {'title': f't-{i}',
+                            'slug': f's-{i}',
+                            'author': {'username': f'a{i}'}
+                            }
+            recipe: Recipe = self.make_recipe(**kwargs)  # noqa: F841
+
         client: Client = Client()
         response: HttpResponse = client.get(
             reverse('recipes:home')

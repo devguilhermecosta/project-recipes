@@ -1,7 +1,10 @@
 from django.shortcuts import HttpResponse
 from django.urls import reverse, resolve, ResolverMatch
+from django.test import Client
+from django.core.paginator import Paginator, Page
 from recipes import views
 from recipes.models import Recipe
+from unittest.mock import patch
 from .test_recipe_base import RecipeTestBase
 
 
@@ -53,3 +56,21 @@ class RecipesHomeViewTest(RecipeTestBase):
 
         self.assertEqual(response_context_length, 1)
         self.assertIn(recipe.title, response_content)
+
+    def test_recipe_home_is_paginated(self) -> None:
+        for i in range(18):
+            kwargs: dict = {'slug': f's-{i}', 'author': {'username': f'u{i}'}}
+            self.make_recipe(**kwargs)
+
+        #  I edited the environment variable PER_PAGE to have 3 objects per page.  # noqa: E501
+        #  As we have 18 recipes, we will have 6 pages
+        with patch('recipes.views.PER_PAGE', new=3):
+            client: Client = Client()
+            response: HttpResponse = client.get(
+                reverse('recipes:home')
+            )
+
+            recipes: Page = response.context['recipes']
+            paginator: Paginator = recipes.paginator
+
+            self.assertEqual(paginator.num_pages, 6)
