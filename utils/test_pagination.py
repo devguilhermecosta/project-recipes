@@ -141,3 +141,6 @@ class TestRecipePagination(RecipeTestBase):
     #             amount_recipes_titles += 1
 
     #     self.assertEqual(amount_recipes_titles, 9)
+
+    def test_fail_continue(self) -> None:
+        self.fail(msg='Fazer a documentação do Django Paginator')
