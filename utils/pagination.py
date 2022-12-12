@@ -38,7 +38,7 @@ def make_pagination_range(page_range: list[int],
 
 def make_pagination(request: HttpRequest,
                     query_set: list[object],
-                    qty_objects: int,
+                    qty_objects: int | str,
                     per_page: int = 4,
                     ) -> Paginator:
     paginator: Paginator = Paginator(query_set, qty_objects)
