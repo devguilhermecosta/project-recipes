@@ -3,6 +3,9 @@
 {% block title %}Home | {% endblock title %}
 
 {% block content %}
+
+{% include "recipes/partials/messages.html" %}
+
 <div class="main-content main-content-list">
     {% for recipe in recipes %}
         {% include "recipes/partials/recipe.html" %}
@@ -10,4 +13,5 @@
         <h1 style="color: #ffff">No recipe found :(</div></h1>
     {% endfor %}
 </div>
+
 {% endblock content %}

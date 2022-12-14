@@ -15,3 +15,11 @@ function openMenu() {
         stateOfMenu = true;
     }
 }
+
+document.addEventListener("click", function(event) {
+    const element = event.target;
+
+    if (element.classList.contains("messages_element")) {
+        element.parentElement.remove();
+    }
+})

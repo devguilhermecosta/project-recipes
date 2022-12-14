@@ -9,6 +9,20 @@
     --text-white: white;
     --text-card: #3b3b3b;
     --text-card-details: #4b4b4b;
+    --text-message-default: #000;
+    --text-message-succes: darkgreen;
+    --text-message-info: darkgreen;
+    --text-message-error: darkred;
+    --text-message-debug: darkblue;
+    --text-message-warning: rgb(160, 89, 2);
+    --text-messages-element: white;
+    --bg-message-default: #4b4b4b;
+    --bg-message-succes: lightgreen;
+    --bg-message-info: lightgreen;
+    --bg-message-error: rgb(238, 80, 80);
+    --bg-message-debug: lightblue;
+    --bg-message-warning: rgb(219, 180, 107);
+    --bg-messages-element: darkred;
 }
 
 * {
@@ -362,6 +376,64 @@ header {
 
 .footer a:hover {
     filter: brightness(0.8);
+}
+
+.messages {
+    max-width: 600px;
+    padding: 15px 20px;
+    margin: 0 auto;
+    margin-bottom: 5px;
+    text-align: center;
+    background-color: var(--bg-message-default);
+    border-radius: 5px;
+    color: var(--text-message-default);
+    position: relative;
+}
+
+.messages_element {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--bg-messages-element);
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.messages_element::before {
+    content: 'X';
+    color: var(--text-messages-element);
+    font-weight: bolder;
+    font-size: 10px;
+}
+
+.message-debug {
+    background-color: var(--bg-message-debug);
+    color: var(--text-message-debug);
+}
+
+.message-error {
+    background-color: var(--bg-message-error);
+    color: var(--text-message-error);
+}
+
+.message-info {
+    background-color: var(--bg-message-info);
+    color: var(--text-message-info);
+}
+
+.message-succes {
+    background-color: var(--bg-message-succes);
+    color: var(--text-message-succes);
+}
+
+.message-warning {
+    background-color: var(--bg-message-warning);
+    color: var(--text-message-warning);
 }
 
 @media screen and (max-width: 360px) {

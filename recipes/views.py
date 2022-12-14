@@ -4,6 +4,7 @@ from django.http import Http404, HttpRequest
 from django.db.models import Q
 from . models import Recipe
 from utils.pagination import make_pagination
+from django.contrib import messages
 
 PER_PAGE = os.environ.get("PER_PAGE", 9)
 
@@ -12,6 +13,12 @@ def home(request: HttpRequest) -> render:
     recipes: list[object] = Recipe.objects.filter(is_published=True).order_by('-id')  # noqa: E501
 
     page_object, pagination_range = make_pagination(request, recipes, PER_PAGE)
+
+    messages.success(request, "Carregado com sucesso")
+    messages.error(request, 'Error ao carregar')
+    messages.warning(request, 'alerta')
+    messages.info(request, 'aviso')
+    messages.debug(request, 'debug')
 
     return render(request, 'recipes/pages/home.html', context={
         'recipes': page_object,
