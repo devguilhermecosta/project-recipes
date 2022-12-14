@@ -4,7 +4,6 @@ from django.http import Http404, HttpRequest
 from django.db.models import Q
 from . models import Recipe
 from utils.pagination import make_pagination
-from django.contrib import messages
 
 PER_PAGE = os.environ.get("PER_PAGE", 9)
 
