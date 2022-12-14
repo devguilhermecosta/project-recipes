@@ -14,12 +14,6 @@ def home(request: HttpRequest) -> render:
 
     page_object, pagination_range = make_pagination(request, recipes, PER_PAGE)
 
-    messages.success(request, "Carregado com sucesso")
-    messages.error(request, 'Error ao carregar')
-    messages.warning(request, 'alerta')
-    messages.info(request, 'aviso')
-    messages.debug(request, 'debug')
-
     return render(request, 'recipes/pages/home.html', context={
         'recipes': page_object,
         'pagination_range': pagination_range,
