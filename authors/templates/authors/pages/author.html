@@ -1,1 +1,25 @@
-<h1>Essa é a dashbord dos autores</h1>
+{% extends 'global/base.html' %}
+
+{% block title %}Register |{% endblock title %}
+
+{% block content %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+
+    <h1>Register</h1>
+    {% for field in form %}
+        <div>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {{ field.help_text }}
+        </div>
+    {% endfor %}
+
+    {{ field.errors }}
+
+    <button type="submit">Send</button>
+
+</form>
+
+{% endblock content %}
