@@ -44,6 +44,13 @@ body {
     justify-content: space-between;
 }
 
+.center-flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .nav-container {
     width: 3px;
     height: 100vh;
@@ -436,9 +443,67 @@ header {
     color: var(--text-message-warning);
 }
 
+.form {
+    max-width: 650px;
+    margin-top: 30px;
+    padding-left: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 10px;
+}
+
+.form > div {
+    width: 50%;
+    margin-bottom: 15px;
+}
+
+.form > div > label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+.form > div > input {
+    width: 90%;
+    height: 50px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    outline: none;
+    border: none;
+    font-size: 18px;
+}
+
+.form > div > input:focus {
+    border: 2px solid var(--bg-menu);
+}
+
+.form > .errorlist {
+    color: var(--text-message-error);
+}
+
+.form .button-container {
+    width: 100%;
+    text-align: center;
+}
+
+.form button[type="submit"] {
+    width: 60px;
+    padding: 10px 5px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--bg-menu);
+    color: var(--text-white);
+    cursor: pointer;
+}
+
 @media screen and (max-width: 360px) {
     .footer a {
         margin: 0 auto;
+    }
+
+    .form > div {
+        width: 100%;
     }
 }
 

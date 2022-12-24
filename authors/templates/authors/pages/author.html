@@ -4,22 +4,26 @@
 
 {% block content %}
 
-<form action="{% url 'authors:create' %}" method="POST">
-    {% csrf_token %}
-
+<div class="form-container center-flex">
     <h1>Register</h1>
-    {% for field in form %}
-        <div>
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-            {{ field.help_text }}
+
+    <form class="form" action="{% url 'authors:create' %}" method="POST">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {{ field.help_text }}
+            </div>
+        {% endfor %}
+
+        {{ field.errors }}
+
+        <div class="button-container">
+            <button type="submit">Send</button>
         </div>
-    {% endfor %}
-
-    {{ field.errors }}
-
-    <button type="submit">Send</button>
-
-</form>
+    </form>
+</div>
 
 {% endblock content %}
