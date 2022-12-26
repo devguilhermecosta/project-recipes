@@ -1,5 +1,6 @@
 from django import forms
 from django.forms import CharField
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
 
@@ -14,12 +15,9 @@ def add_widget_attr(field: CharField, attr_name: str, attr_value: str) -> None:
 class RegisterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        add_widget_attr(self.fields['password'], 'placeholder', 'Digite sua senha')  # noqa: E501
 
     password2 = forms.CharField(required=True,
                                 label='Confirme a senha',
-                                min_length=3,
-                                max_length=5,
                                 widget=forms.PasswordInput(attrs={
                                     'placeholder': 'Repita a senha',
                                     }),
@@ -57,6 +55,9 @@ class RegisterForm(forms.ModelForm):
             'first_name': {
                 'min_length': 'Digite no mínimo 5 caracteres',
             },
+            'password': {
+                'invalid': 'Digite um e-mail válido',
+            },
         }
 
         widgets = {
@@ -65,4 +66,43 @@ class RegisterForm(forms.ModelForm):
                 'class': 'minha-classe',
                 'id': 'first_name',
             }),
+            'password': forms.PasswordInput(attrs={
+                'placeholder': 'Digite sua senha',
+                }),
         }
+
+    def clean_password(self) -> str:
+        data: str = self.cleaned_data.get('password')
+
+        if 'atenção' in data:
+            raise ValidationError('Você não pode digitar %(pipoca)s no password',  # noqa: E501
+                                  code='invalid',
+                                  params={'pipoca': '"atenção"'}
+                                  )
+        return data
+
+    def clean_first_name(self) -> str:
+        data: str = self.cleaned_data.get('first_name')
+
+        if 'guilherme' in data:
+            raise ValidationError('Não pode digitar %(value)s no first name',
+                                  code='invalid',
+                                  params={'value': '"guilherme"'},
+                                  )
+        return data
+
+    def clean(self) -> None:
+        cleaned_data = super().clean()
+        password_one = cleaned_data.get('password')
+        password_two = cleaned_data.get('password2')
+
+        if password_one != password_two:
+            raise ValidationError(
+                {'password': ValidationError('%(value)s. As senhas precisam ser iguais',  # noqa: E501
+                                             code='invalid',
+                                             params={'value': 'ERROR'}),
+                 'password2': ValidationError('%(value)s. Senha diferente da senha one.',  # noqa: E501
+                                              code='invalid',
+                                              params={'value': 'ERROR'}),
+                 }
+                )
