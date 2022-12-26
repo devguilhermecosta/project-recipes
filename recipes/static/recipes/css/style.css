@@ -497,6 +497,10 @@ header {
     cursor: pointer;
 }
 
+input[id="id_password"] {
+    display: block;
+}
+
 @media screen and (max-width: 360px) {
     .footer a {
         margin: 0 auto;
