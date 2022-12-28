@@ -2,6 +2,7 @@ from django import forms
 from django.forms import CharField
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from re import compile
 
 
 def add_placeholder(field: CharField, placeholder_val: str | int) -> None:
@@ -12,9 +13,34 @@ def add_widget_attr(field: CharField, attr_name: str, attr_value: str) -> None:
     field.widget.attrs[attr_name] = f'{attr_value}'
 
 
+def strong_password(password: str) -> None:
+    regex = compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$')
+
+    if not regex.match(password):
+        raise ValidationError(('A senha precisa ter 8 catacteres.'
+                               'Pelo menos uma letra maíscula.'
+                               'Pelo menos uma letra minúscula.'
+                               'Pelo menos um número'
+                               ),
+                              code='invalid',
+                              )
+
+
 class RegisterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+
+    password = forms.CharField(required=True,
+                               label='Senha',
+                               help_text='A senha deve ter letras e números',
+                               widget=forms.PasswordInput(attrs={
+                                   'placeholder': 'Digite a senha',
+                               }),
+                               error_messages={
+                                   'required': 'Campo obrigatório',
+                               },
+                               validators=[strong_password,],
+                               )
 
     password2 = forms.CharField(required=True,
                                 label='Confirme a senha',
@@ -34,7 +60,6 @@ class RegisterForm(forms.ModelForm):
             'last_name',
             'username',
             'email',
-            'password',
         ]
 
         labels = {
@@ -44,7 +69,6 @@ class RegisterForm(forms.ModelForm):
 
         help_texts = {
             'username': 'Digite um usuário válido',
-            'password': 'A senha deve ter letras e números',
         }
 
         error_messages = {
@@ -55,9 +79,6 @@ class RegisterForm(forms.ModelForm):
             'first_name': {
                 'min_length': 'Digite no mínimo 5 caracteres',
             },
-            'password': {
-                'invalid': 'Digite um e-mail válido',
-            },
         }
 
         widgets = {
@@ -66,9 +87,6 @@ class RegisterForm(forms.ModelForm):
                 'class': 'minha-classe',
                 'id': 'first_name',
             }),
-            'password': forms.PasswordInput(attrs={
-                'placeholder': 'Digite sua senha',
-                }),
         }
 
     def clean_password(self) -> str:
