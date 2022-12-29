@@ -29,26 +29,40 @@ def strong_password(password: str) -> None:
 class RegisterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        add_placeholder(self.fields['first_name'], 'Digite seu nome')
+        add_placeholder(self.fields['last_name'], 'Digite seu sobrenome')
+        add_placeholder(self.fields['username'], 'Digite seu usuário')
+        add_placeholder(self.fields['email'], 'Digite seu e-mail')
+        add_placeholder(self.fields['password'], 'Digite a senha')
+        add_placeholder(self.fields['password2'], 'Repita a senha')
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+        self.fields['email'].required = True
+
+    first_name: CharField = forms.CharField(
+        required=True,
+        min_length=4,
+        error_messages={
+            'min_length': 'O campo nome deve ter pelo menos 4 caracteres',
+            'required': 'Este campo é obrigatório',
+            })
 
     password = forms.CharField(required=True,
                                label='Senha',
                                help_text='A senha deve ter letras e números',
-                               widget=forms.PasswordInput(attrs={
-                                   'placeholder': 'Digite a senha',
-                               }),
+                               widget=forms.PasswordInput(),
                                error_messages={
-                                   'required': 'Campo obrigatório',
+                                   'required': 'Este campo é obrigatório',
                                },
                                validators=[strong_password,],
                                )
 
     password2 = forms.CharField(required=True,
                                 label='Confirme a senha',
-                                widget=forms.PasswordInput(attrs={
-                                    'placeholder': 'Repita a senha',
-                                    }),
+                                widget=forms.PasswordInput(),
                                 error_messages={
                                     'invalid': 'Verifique seus dados',
+                                    'required': 'Este campo é obrigatório',
                                     'min_length': 'Deve ter pelo menos 3 caracteres',  # noqa: E501
                                 },
                                 )
@@ -72,20 +86,23 @@ class RegisterForm(forms.ModelForm):
         }
 
         error_messages = {
+            'last_name': {
+                'required': 'Este campo é obrigatório',
+            },
+            'username': {
+                'required': 'Este campo é obrigatório',
+            },
             'email': {
                 'invalid': 'Digite um e-mail válido',
                 'required': 'Este campo é obrigatório',
-            },
-            'first_name': {
-                'min_length': 'Digite no mínimo 5 caracteres',
             },
         }
 
         widgets = {
             'first_name': forms.TextInput(attrs={
-                'placeholder': 'Digite seu nome',
                 'class': 'minha-classe',
                 'id': 'first_name',
+                'required': 'Campo obrigatório',
             }),
         }
 
