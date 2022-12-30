@@ -115,26 +115,6 @@ class RegisterForm(forms.ModelForm):
             'email',
         ]
 
-    def clean_password(self) -> str:
-        data: str = self.cleaned_data.get('password')
-
-        if 'atenção' in data:
-            raise ValidationError('Você não pode digitar %(pipoca)s no password',  # noqa: E501
-                                  code='invalid',
-                                  params={'pipoca': '"atenção"'}
-                                  )
-        return data
-
-    def clean_first_name(self) -> str:
-        data: str = self.cleaned_data.get('first_name')
-
-        if 'guilherme' in data:
-            raise ValidationError('Não pode digitar %(value)s no first name',
-                                  code='invalid',
-                                  params={'value': '"guilherme"'},
-                                  )
-        return data
-
     def clean(self) -> None:
         cleaned_data = super().clean()
         password_one = cleaned_data.get('password')

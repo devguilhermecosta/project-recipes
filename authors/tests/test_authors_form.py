@@ -1,10 +1,12 @@
 from unittest import TestCase
+
 from django.forms import ModelForm
+from django.http import HttpResponse
 from django.test import TestCase as DjangoTestCase
 from django.urls import reverse
-from django.http import HttpResponse
-from authors.forms import RegisterForm
 from parameterized import parameterized
+
+from authors.forms import RegisterForm
 
 
 class RegisterFormAuthorsUnitTest(TestCase):
@@ -79,7 +81,7 @@ class RegisterFormAuthorsIntegrationTest(DjangoTestCase):
         ('password', 8, 'A senha deve ter pelo menos 8 caracteres'),
         ('password2', 8, 'A senha deve ter pelo menos 8 caracteres'),
     ])
-    def test_fields_min_length(self, field, min_length, message) -> None:
+    def test_fields_min_length_4_or_8(self, field, min_length, message) -> None:  # noqa: E501
         self.form_data[field] = 'a' * (min_length - 1)
         url: str = reverse('authors:create')
         response: HttpResponse = self.client.post(url, data=self.form_data, follow=True)  # noqa: E501
@@ -93,9 +95,55 @@ class RegisterFormAuthorsIntegrationTest(DjangoTestCase):
         ('password', 128, 'O campo senha deve ter 128 caracteres ou menos'),
         ('password2', 128, 'O campo senha deve ter 128 caracteres ou menos'),
     ])
-    def test_fields_max_length(self, field, max_length, message) -> None:
+    def test_fields_max_length_128(self, field, max_length, message) -> None:
         self.form_data[field] = 'a' * (max_length + 1)
         url: str = reverse('authors:create')
         response: HttpResponse = self.client.post(url, data=self.form_data, follow=True)  # noqa: E501
 
         self.assertIn(message, response.context['form'].errors.get(field))
+        self.assertIn(message, response.content.decode('utf-8'))
+
+    def test_field_password_and_password2_are_strong_and_equal(self) -> None:  # noqa: E501
+        self.form_data['password'] = 'AbcCasa123'
+        self.form_data['password2'] = 'AbcCasa123'
+
+        url: str = reverse('authors:create')
+        response: HttpResponse = self.client.post(url, data=self.form_data, follow=True)  # noqa: E501
+
+        content: str = response.content.decode('utf-8')
+
+        message: str = (('A senha precisa ter 8 catacteres.'
+                         'Pelo menos uma letra maíscula.'
+                         'Pelo menos uma letra minúscula.'
+                         'Pelo menos um número'
+                         ))
+        message_2: str = 'ERROR. As senhas precisam ser iguais'
+
+        self.assertNotIn(message, content)
+        self.assertNotIn(message_2, content)
+
+    def test_field_password_and_password2_are_not_strong_and_not_equal(self) -> None:  # noqa: E501
+        self.form_data['password'] = '12345678'
+        self.form_data['password2'] = 'abc12345678'
+
+        url: str = reverse('authors:create')
+        response: HttpResponse = self.client.post(url, data=self.form_data, follow=True)  # noqa: E501
+
+        content: str = response.content.decode('utf-8')
+
+        message: str = (('A senha precisa ter 8 catacteres.'
+                         'Pelo menos uma letra maíscula.'
+                         'Pelo menos uma letra minúscula.'
+                         'Pelo menos um número'
+                         ))
+        message_2: str = 'ERROR. As senhas precisam ser iguais'
+
+        self.assertIn(message, content)
+        self.assertIn(message_2, content)
+
+    def test_content_are_message_succes_if_form_post_ok(self) -> None:
+        url: str = reverse('authors:create')
+        response: HttpResponse = self.client.post(url, data=self.form_data, follow=True)  # noqa: E501
+        message_succes: str = 'Usuário criado com sucesso.'
+
+        self.assertIn(message_succes, response.content.decode('utf-8'))
