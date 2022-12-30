@@ -84,3 +84,6 @@ class RegisterFormAuthorsIntegrationTest(DjangoTestCase):
         self.fail(('Continuar os testes a partir daqui. '
                    'Fazer os demais testes para min_length e max_length. '
                    'Refatorar o RegisterForm. Está muito bagunçado.'))
+
+    def test_fail(self) -> None:
+        print('I created a test for GitHub in Ubunto')
