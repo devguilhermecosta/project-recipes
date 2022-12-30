@@ -27,3 +27,9 @@ class AuthorsUrlsTest(TestCase):
             reverse('authors:create')
             )
         self.assertEqual(url.func, views.register_create)
+
+    def test_authors_url_status_code_404_if_method_get(self) -> None:
+        url: str = reverse('authors:create')
+        response: HttpResponse = self.client.get(url)
+
+        self.assertEqual(response.status_code, 404)
