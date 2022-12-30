@@ -72,18 +72,30 @@ class RegisterFormAuthorsIntegrationTest(DjangoTestCase):
         self.assertIn(message, response.content.decode('utf-8'))
         # self.assertIn(message, response.context['form'].errors.get(field))
 
-    def test_field_username_have_4_or_plus_characteres(self) -> None:
-        self.form_data['first_name'] = 'a' * 2
+    @parameterized.expand([
+        ('first_name', 4, 'O campo nome deve ter pelo menos 4 caracteres'),
+        ('last_name', 4, 'O campo sobrenome deve ter pelo menos 4 caracteres'),
+        ('username', 4, 'O campo usuário deve ter pelo menos 4 caracteres'),
+        ('password', 8, 'A senha deve ter pelo menos 8 caracteres'),
+        ('password2', 8, 'A senha deve ter pelo menos 8 caracteres'),
+    ])
+    def test_fields_min_length(self, field, min_length, message) -> None:
+        self.form_data[field] = 'a' * (min_length - 1)
         url: str = reverse('authors:create')
         response: HttpResponse = self.client.post(url, data=self.form_data, follow=True)  # noqa: E501
 
-        message: str = 'O campo nome deve ter pelo menos 4 caracteres'
-
         self.assertIn(message, response.content.decode('utf-8'))
 
-        self.fail(('Continuar os testes a partir daqui. '
-                   'Fazer os demais testes para min_length e max_length. '
-                   'Refatorar o RegisterForm. Está muito bagunçado.'))
+    @parameterized.expand([
+        ('first_name', 128, 'O campo nome deve ter 128 caracteres ou menos'),
+        ('last_name', 128, 'O campo sobrenome deve ter 128 caracteres ou menos'),  # noqa: E501
+        ('username', 128, 'O campo usuário deve ter 128 caracteres ou menos'),
+        ('password', 128, 'O campo senha deve ter 128 caracteres ou menos'),
+        ('password2', 128, 'O campo senha deve ter 128 caracteres ou menos'),
+    ])
+    def test_fields_max_length(self, field, max_length, message) -> None:
+        self.form_data[field] = 'a' * (max_length + 1)
+        url: str = reverse('authors:create')
+        response: HttpResponse = self.client.post(url, data=self.form_data, follow=True)  # noqa: E501
 
-    def test_fail(self) -> None:
-        print('I created a test for GitHub in Ubunto')
+        self.assertIn(message, response.context['form'].errors.get(field))

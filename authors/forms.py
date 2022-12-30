@@ -5,14 +5,6 @@ from django.contrib.auth.models import User
 from re import compile
 
 
-def add_placeholder(field: CharField, placeholder_val: str | int) -> None:
-    field.widget.attrs['placeholder'] = f'{placeholder_val}'
-
-
-def add_widget_attr(field: CharField, attr_name: str, attr_value: str) -> None:
-    field.widget.attrs[attr_name] = f'{attr_value}'
-
-
 def strong_password(password: str) -> None:
     regex = compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$')
 
@@ -29,41 +21,88 @@ def strong_password(password: str) -> None:
 class RegisterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        add_placeholder(self.fields['first_name'], 'Digite seu nome')
-        add_placeholder(self.fields['last_name'], 'Digite seu sobrenome')
-        add_placeholder(self.fields['username'], 'Digite seu usuário')
-        add_placeholder(self.fields['email'], 'Digite seu e-mail')
-        add_placeholder(self.fields['password'], 'Digite a senha')
-        add_placeholder(self.fields['password2'], 'Repita a senha')
-        self.fields['first_name'].required = True
-        self.fields['last_name'].required = True
-        self.fields['email'].required = True
 
     first_name: CharField = forms.CharField(
-        required=True,
         min_length=4,
+        max_length=128,
+        label='Nome',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Digite seu nome',
+            'class': 'minha-classe',
+            'id': 'first_name',
+        }),
         error_messages={
             'min_length': 'O campo nome deve ter pelo menos 4 caracteres',
+            'max_length': 'O campo nome deve ter 128 caracteres ou menos',
             'required': 'Este campo é obrigatório',
             })
 
-    password = forms.CharField(required=True,
-                               label='Senha',
+    last_name: CharField = forms.CharField(
+        label='Sobrenome',
+        min_length=4,
+        max_length=128,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Digite seu sobrenome',
+        }),
+        error_messages={
+            'required': 'Este campo é obrigatório',
+            'min_length': 'O campo sobrenome deve ter pelo menos 4 caracteres',
+            'max_length': 'O campo sobrenome deve ter 128 caracteres ou menos',
+        },
+    )
+
+    username: CharField = forms.CharField(
+        label='Usuário',
+        min_length=4,
+        max_length=128,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Digite seu usuário',
+        }),
+        error_messages={
+            'required': 'Este campo é obrigatório',
+            'min_length': 'O campo usuário deve ter pelo menos 4 caracteres',
+            'max_length': 'O campo usuário deve ter 128 caracteres ou menos',
+        },
+        help_text='Digite um usuário válido',
+    )
+
+    email: CharField = forms.CharField(
+        label='Endereço de email',
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'Digite seu e-mail',
+        }),
+        error_messages={
+            'invalid': 'Digite um e-mail válido',
+            'required': 'Este campo é obrigatório',
+        },
+    )
+
+    password = forms.CharField(label='Senha',
+                               min_length=8,
+                               max_length=128,
                                help_text='A senha deve ter letras e números',
-                               widget=forms.PasswordInput(),
+                               widget=forms.PasswordInput(attrs={
+                                   'placeholder': 'Digite a senha',
+                                   }),
                                error_messages={
                                    'required': 'Este campo é obrigatório',
+                                   'min_length': 'A senha deve ter pelo menos 8 caracteres',  # noqa: E501
+                                   'max_length': 'O campo senha deve ter 128 caracteres ou menos',  # noqa: E501
                                },
                                validators=[strong_password,],
                                )
 
-    password2 = forms.CharField(required=True,
-                                label='Confirme a senha',
-                                widget=forms.PasswordInput(),
+    password2 = forms.CharField(label='Confirme a senha',
+                                min_length=8,
+                                max_length=128,
+                                widget=forms.PasswordInput(attrs={
+                                    'placeholder': 'Repita a senha',
+                                    }),
                                 error_messages={
                                     'invalid': 'Verifique seus dados',
                                     'required': 'Este campo é obrigatório',
-                                    'min_length': 'Deve ter pelo menos 3 caracteres',  # noqa: E501
+                                    'min_length': 'A senha deve ter pelo menos 8 caracteres',  # noqa: E501
+                                    'max_length': 'O campo senha deve ter 128 caracteres ou menos',  # noqa: E501
                                 },
                                 )
 
@@ -75,36 +114,6 @@ class RegisterForm(forms.ModelForm):
             'username',
             'email',
         ]
-
-        labels = {
-            'first_name': 'Nome',
-            'last_name': 'Sobrenome',
-        }
-
-        help_texts = {
-            'username': 'Digite um usuário válido',
-        }
-
-        error_messages = {
-            'last_name': {
-                'required': 'Este campo é obrigatório',
-            },
-            'username': {
-                'required': 'Este campo é obrigatório',
-            },
-            'email': {
-                'invalid': 'Digite um e-mail válido',
-                'required': 'Este campo é obrigatório',
-            },
-        }
-
-        widgets = {
-            'first_name': forms.TextInput(attrs={
-                'class': 'minha-classe',
-                'id': 'first_name',
-                'required': 'Campo obrigatório',
-            }),
-        }
 
     def clean_password(self) -> str:
         data: str = self.cleaned_data.get('password')
