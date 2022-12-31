@@ -1,0 +1,11 @@
+ <!-- input of search -->
+<section class="search-container">
+    <div class="div-space">
+        <form class="box-search" action="{% url 'recipes:search' %}" method="GET">
+            <input type="search" name="q" id="search" value="{{ search_term }}" class="input-search" placeholder="buscar receita" required>
+            <button type="submit" class="button-search">
+                <span class="material-icons icon-search">search</span>
+            </button>
+        </form>
+    </div>
+</section>

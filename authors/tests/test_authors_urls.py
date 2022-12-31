@@ -22,3 +22,10 @@ class AuthorsUrlsTest(TestCase):
     def test_authors_url_register_create_is_correct(self) -> None:
         url: str = reverse('authors:create')
         self.assertEqual(url, '/authors/register/create/')
+
+    def test_authors_url_load_correct_template(self) -> None:
+        url: str = reverse('authors:register')
+
+        response: HttpResponse = self.client.get(url)
+
+        self.assertTemplateUsed(response, 'authors/pages/author.html')
