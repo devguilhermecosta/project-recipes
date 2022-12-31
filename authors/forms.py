@@ -115,6 +115,17 @@ class RegisterForm(forms.ModelForm):
             'email',
         ]
 
+    def clean_email(self) -> CharField | ValidationError:
+        email: CharField = self.cleaned_data.get('email', '')  # pega os dados do input de e-mail  # noqa: E501
+        exists: bool = User.objects.filter(email=email).exists()  # verifica se o e-mail já existe  # noqa: E501
+
+        if exists:  # se o email já existir um ValidationError é levantado
+            raise ValidationError('E-mail ja cadastrado.',
+                                  code='invalid',
+                                  )
+
+        return email
+
     def clean(self) -> None:
         cleaned_data = super().clean()
         password_one = cleaned_data.get('password')

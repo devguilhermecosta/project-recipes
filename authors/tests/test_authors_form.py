@@ -147,3 +147,14 @@ class RegisterFormAuthorsIntegrationTest(DjangoTestCase):
         message_succes: str = 'Usuário criado com sucesso.'
 
         self.assertIn(message_succes, response.content.decode('utf-8'))
+
+    def test_email_field_must_be_unique(self) -> None:
+        url: str = reverse('authors:create')
+
+        message: str = 'E-mail ja cadastrado.'
+
+        self.client.post(url, data=self.form_data, follow=True)
+        response: HttpResponse = self.client.post(url, data=self.form_data, follow=True)  # noqa: E501
+
+        self.assertIn(message, response.context['form'].errors.get('email'))
+        self.assertIn(message, response.content.decode('utf-8'))
