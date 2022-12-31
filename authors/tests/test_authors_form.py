@@ -3,6 +3,7 @@ from unittest import TestCase
 from django.forms import ModelForm
 from django.http import HttpResponse
 from django.test import TestCase as DjangoTestCase
+from django.test import Client
 from django.urls import reverse
 from parameterized import parameterized
 
@@ -158,3 +159,21 @@ class RegisterFormAuthorsIntegrationTest(DjangoTestCase):
 
         self.assertIn(message, response.context['form'].errors.get('email'))
         self.assertIn(message, response.content.decode('utf-8'))
+
+    def test_user_can_login(self) -> None:
+        url: str = reverse('authors:create')
+
+        self.form_data.update({
+            'username': 'guilhermecosta',
+            'password': 'Guilherme1234@',
+            'password2': 'Guilherme1234@',
+            'email': 'email@email.com',
+            })
+
+        client: Client = Client()
+
+        client.post(url, data=self.form_data, follow=True)
+
+        self.assertTrue(client.login(username='guilhermecosta',
+                                     password='Guilherme1234@',
+                                     ))
