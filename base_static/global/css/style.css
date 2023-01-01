@@ -44,6 +44,23 @@ body {
     justify-content: space-between;
 }
 
+.container-user {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    color: var(--bg-card-details)
+}
+
+.container-user a {
+    text-decoration: none;
+    color: var(--bg-card-details);
+    font-weight: bolder;
+}
+
+.container-user a:hover {
+    text-decoration: underline;
+}
+
 .center-flex {
     display: flex;
     flex-direction: column;

@@ -1,5 +1,11 @@
 <!-- header -->
 <header>
+    <div class="container-user">
+        <p><a href="{% url 'authors:register' %}">Cadastre-se</a>
+        ou
+        <a href="{% url 'authors:login' %}">faça login</a>
+        </p>
+    </div>
     <div class="container-header flex-center">
         <a href="{% url 'recipes:home' %}">
             <span class="material-icons icon-header">flatware</span>

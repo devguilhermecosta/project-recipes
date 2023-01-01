@@ -1,10 +1,12 @@
-from django.contrib.sessions.backends.base import SessionBase
-from django.shortcuts import render, redirect
-from django.http import HttpRequest, Http404
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.sessions.backends.base import SessionBase
+from django.http import Http404, HttpRequest
+from django.shortcuts import redirect, render
 from django.urls import reverse
-from .forms import RegisterForm
+
+from authors.forms import RegisterForm, LoginForm
 
 
 def register_view(request: HttpRequest) -> render:
@@ -15,7 +17,8 @@ def register_view(request: HttpRequest) -> render:
 
     return render(request, 'authors/pages/author.html', context={
         'form': form,
-        'form_action': reverse('authors:create'),
+        'form_title': 'Register',
+        'form_action': reverse('authors:register_create'),
     })
 
 
@@ -36,3 +39,34 @@ def register_create(request: HttpRequest) -> dict:
         del request.session['register_form_data']  # deleta os dados dos campos
 
     return redirect('authors:register')
+
+
+def login_view(request) -> render:
+    form: LoginForm = LoginForm()
+
+    return render(request, 'authors/pages/login.html', context={
+        'form': form,
+        'form_title': 'Login',
+        'form_action': reverse('authors:login_create'),
+    })
+
+
+def login_create(request) -> None:
+    if not request.POST:
+        raise Http404
+
+    form: LoginForm = LoginForm(request.POST)
+
+    if form.is_valid():
+        authenticated_user = authenticate(
+            username=form.cleaned_data.get('username', ''),
+            password=form.cleaned_data.get('password', ''),
+        )
+
+        if authenticated_user is not None:
+            login(request, authenticated_user)
+            messages.success(request, 'Login realizado com sucesso')
+        else:
+            messages.error(request, 'Usuário ou senha inválidos.')
+
+    return redirect('authors:login')

@@ -1,6 +1,7 @@
-from django.test import TestCase, Client
-from django.urls import reverse, resolve, ResolverMatch
 from django.http import HttpResponse
+from django.test import Client, TestCase
+from django.urls import ResolverMatch, resolve, reverse
+
 from authors import views
 
 
@@ -24,12 +25,12 @@ class AuthorsUrlsTest(TestCase):
 
     def test_authors_url_register_create_load_correct_view(self) -> None:
         url: ResolverMatch = resolve(
-            reverse('authors:create')
+            reverse('authors:register_create')
             )
         self.assertEqual(url.func, views.register_create)
 
     def test_authors_url_status_code_404_if_method_get(self) -> None:
-        url: str = reverse('authors:create')
+        url: str = reverse('authors:register_create')
         response: HttpResponse = self.client.get(url)
 
         self.assertEqual(response.status_code, 404)

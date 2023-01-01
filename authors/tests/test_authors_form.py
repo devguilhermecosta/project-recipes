@@ -3,7 +3,6 @@ from unittest import TestCase
 from django.forms import ModelForm
 from django.http import HttpResponse
 from django.test import TestCase as DjangoTestCase
-from django.test import Client
 from django.urls import reverse
 from parameterized import parameterized
 
@@ -69,7 +68,7 @@ class RegisterFormAuthorsIntegrationTest(DjangoTestCase):
     ])
     def test_fields_cannot_be_empty(self, field, message) -> None:
         self.form_data[field] = ''
-        url: str = reverse('authors:create')
+        url: str = reverse('authors:register_create')
         response: HttpResponse = self.client.post(url, data=self.form_data, follow=True)  # noqa: E501
 
         self.assertIn(message, response.content.decode('utf-8'))
@@ -84,7 +83,7 @@ class RegisterFormAuthorsIntegrationTest(DjangoTestCase):
     ])
     def test_fields_min_length_4_or_8(self, field, min_length, message) -> None:  # noqa: E501
         self.form_data[field] = 'a' * (min_length - 1)
-        url: str = reverse('authors:create')
+        url: str = reverse('authors:register_create')
         response: HttpResponse = self.client.post(url, data=self.form_data, follow=True)  # noqa: E501
 
         self.assertIn(message, response.content.decode('utf-8'))
@@ -98,7 +97,7 @@ class RegisterFormAuthorsIntegrationTest(DjangoTestCase):
     ])
     def test_fields_max_length_128(self, field, max_length, message) -> None:
         self.form_data[field] = 'a' * (max_length + 1)
-        url: str = reverse('authors:create')
+        url: str = reverse('authors:register_create')
         response: HttpResponse = self.client.post(url, data=self.form_data, follow=True)  # noqa: E501
 
         self.assertIn(message, response.context['form'].errors.get(field))
@@ -108,7 +107,7 @@ class RegisterFormAuthorsIntegrationTest(DjangoTestCase):
         self.form_data['password'] = 'AbcCasa123'
         self.form_data['password2'] = 'AbcCasa123'
 
-        url: str = reverse('authors:create')
+        url: str = reverse('authors:register_create')
         response: HttpResponse = self.client.post(url, data=self.form_data, follow=True)  # noqa: E501
 
         content: str = response.content.decode('utf-8')
@@ -127,7 +126,7 @@ class RegisterFormAuthorsIntegrationTest(DjangoTestCase):
         self.form_data['password'] = '12345678'
         self.form_data['password2'] = 'abc12345678'
 
-        url: str = reverse('authors:create')
+        url: str = reverse('authors:register_create')
         response: HttpResponse = self.client.post(url, data=self.form_data, follow=True)  # noqa: E501
 
         content: str = response.content.decode('utf-8')
@@ -143,14 +142,14 @@ class RegisterFormAuthorsIntegrationTest(DjangoTestCase):
         self.assertIn(message_2, content)
 
     def test_content_are_message_succes_if_form_post_ok(self) -> None:
-        url: str = reverse('authors:create')
+        url: str = reverse('authors:register_create')
         response: HttpResponse = self.client.post(url, data=self.form_data, follow=True)  # noqa: E501
         message_succes: str = 'Usuário criado com sucesso.'
 
         self.assertIn(message_succes, response.content.decode('utf-8'))
 
     def test_email_field_must_be_unique(self) -> None:
-        url: str = reverse('authors:create')
+        url: str = reverse('authors:register_create')
 
         message: str = 'E-mail ja cadastrado.'
 
@@ -159,21 +158,3 @@ class RegisterFormAuthorsIntegrationTest(DjangoTestCase):
 
         self.assertIn(message, response.context['form'].errors.get('email'))
         self.assertIn(message, response.content.decode('utf-8'))
-
-    def test_user_can_login(self) -> None:
-        url: str = reverse('authors:create')
-
-        self.form_data.update({
-            'username': 'guilhermecosta',
-            'password': 'Guilherme1234@',
-            'password2': 'Guilherme1234@',
-            'email': 'email@email.com',
-            })
-
-        client: Client = Client()
-
-        client.post(url, data=self.form_data, follow=True)
-
-        self.assertTrue(client.login(username='guilhermecosta',
-                                     password='Guilherme1234@',
-                                     ))

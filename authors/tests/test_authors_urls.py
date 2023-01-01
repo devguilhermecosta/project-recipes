@@ -1,6 +1,6 @@
-from django.test import TestCase, Client
-from django.urls import reverse
 from django.http import HttpResponse
+from django.test import Client, TestCase
+from django.urls import reverse
 
 
 class AuthorsUrlsTest(TestCase):
@@ -20,7 +20,7 @@ class AuthorsUrlsTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_authors_url_register_create_is_correct(self) -> None:
-        url: str = reverse('authors:create')
+        url: str = reverse('authors:register_create')
         self.assertEqual(url, '/authors/register/create/')
 
     def test_authors_url_load_correct_template(self) -> None:

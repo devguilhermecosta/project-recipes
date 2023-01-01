@@ -1,0 +1,15 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Login |{% endblock title %}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+    <div class="form-container center-flex">
+        <p>Você está logado como {{ request.user.username }}</p>
+    </div>
+{% endif %}
+
+{% include 'global/partials/form.html' %}
+
+{% endblock content %}
