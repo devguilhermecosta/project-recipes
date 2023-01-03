@@ -29,3 +29,13 @@ class AuthorsUrlsTest(TestCase):
         response: HttpResponse = self.client.get(url)
 
         self.assertTemplateUsed(response, 'authors/pages/author.html')
+
+    def test_authors_url_login_is_correct(self) -> None:
+        url: str = reverse('authors:login')
+
+        response: HttpResponse = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_f(self):
+        self.fail('Continuar os testes de login e logout.')

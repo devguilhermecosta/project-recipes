@@ -34,3 +34,17 @@ class AuthorsUrlsTest(TestCase):
         response: HttpResponse = self.client.get(url)
 
         self.assertEqual(response.status_code, 404)
+
+    def test_authors_url_login_load_correc_view(self) -> None:
+        response: ResolverMatch = resolve(
+            reverse('authors:login')
+        )
+
+        self.assertEqual(response.func, views.login_view)
+
+    def test_authors_url_login_load_correct_template(self) -> None:
+        url: str = reverse('authors:login')
+
+        response: HttpResponse = self.client.get(url)
+
+        self.assertTemplateUsed(response, 'authors/pages/login.html')

@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.sessions.backends.base import SessionBase
 from django.http import Http404, HttpRequest
 from django.shortcuts import redirect, render
@@ -37,6 +38,7 @@ def register_create(request: HttpRequest) -> dict:
         messages.success(request, 'Usuário criado com sucesso.')  # informa que o usuário foi criado  # noqa: E501
 
         del request.session['register_form_data']  # deleta os dados dos campos
+        return redirect(reverse('authors:login'))  # direciona para a página de login  # noqa: E501
 
     return redirect('authors:register')
 
@@ -70,3 +72,15 @@ def login_create(request) -> None:
             messages.error(request, 'Usuário ou senha inválidos.')
 
     return redirect('authors:login')
+
+
+@login_required(redirect_field_name='next', login_url='authors:login')
+def logout_view(request) -> None:
+    if not request.POST:
+        return redirect(reverse('authors:login'))
+
+    if request.POST.get('username') != request.user.username:
+        return redirect(reverse('authors:login'))
+
+    logout(request)  # faz o logout
+    return redirect(reverse('authors:login'))  # redireciona para a página de login  # noqa: E501
