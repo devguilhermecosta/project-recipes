@@ -1,13 +1,9 @@
 from django.http import HttpResponse
-from django.test import Client, TestCase
+from django.test import TestCase
 from django.urls import reverse
 
 
 class AuthorsUrlsTest(TestCase):
-    def setUp(self) -> None:
-        self.client: Client = Client()
-        return super().setUp()
-
     def test_authors_url_register_is_correct(self) -> None:
         url: str = reverse('authors:register')
         self.assertEqual(url, '/authors/register/')

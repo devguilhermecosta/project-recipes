@@ -1,10 +1,25 @@
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import ResolverMatch, resolve, reverse
+
 from authors import views
 
 
 class AuthorsLoginViewTest(TestCase):
+    def setUp(self) -> None:
+        self.user: User = User.objects.create_user(username='adao123',
+                                                   email='email@email.com',
+                                                   password='Adao1234@@',
+                                                   )
+        self.user.save()
+
+        self.user_data: dict = {
+            'username': 'adao123',
+            'password': 'Adao1234@@',
+        }
+        return super().setUp()
+
     def test_url_register_load_correct_view(self) -> None:
         url: ResolverMatch = resolve(
             reverse('authors:register')
@@ -44,32 +59,30 @@ class AuthorsLoginViewTest(TestCase):
 
         self.assertEqual(response.func, views.login_create)
 
-    # def test_login_create_user_is_authenticated(self) -> None:
-    #     user: dict = {
-    #         'first_name': 'adão',
-    #         'last_name': 'da silva',
-    #         'username': 'adao123',
-    #         'email': 'adao@email.com',
-    #         'password': 'Adao1234@@',
-    #         'password2': 'Adao1234@@',
-    #     }
+    def test_login_create_user_is_authenticated(self) -> None:
+        response: HttpResponse = self.client.post(
+            reverse('authors:login_create'),
+            data=self.user_data,
+            follow=True,
+            )
+        response_content: str = response.content.decode('utf-8')
 
-    #     user_data: dict = {
-    #         'username': 'adao123',
-    #         'password': 'Adao1234@@',
-    #     }
+        self.assertIn('Login realizado com sucesso', response_content)
 
-    #     response_1: HttpResponse = self.client.post(  # noqa: F841
-    #         reverse('authors:register_create'),
-    #         data=user,
-    #         follow=True,
-    #         )
+    def test_login_create_user_is_not_authenticated(self) -> None:
+        self.user_data.update({
+            'password': '123456',
+        })
 
-    #     response_2: HttpResponse = self.client.post(  # noqa: F841
-    #         reverse('authors:login_create'),
-    #         data=user_data,
-    #         follow=True,
-    #         )
+        response: HttpResponse = self.client.post(
+            reverse('authors:login_create'),
+            data=self.user_data,
+            follow=True,
+        )
+
+        response_content: str = response.content.decode('utf-8')
+
+        self.assertIn('Usuário ou senha inválidos.', response_content)
 
     def test_url_logout_load_correct_view(self) -> None:
         response: ResolverMatch = resolve(
@@ -77,8 +90,3 @@ class AuthorsLoginViewTest(TestCase):
         )
 
         self.assertEqual(response.func, views.logout_view)
-        self.fail(('finalizar os testes de login e logout. '
-                   'Para isso é preciso conseguir fazer o login. '
-                   'Finalizar também o manual de elaboração '
-                   'dos formulários.')
-                  )
