@@ -68,6 +68,8 @@ class AuthorsLoginViewTest(TestCase):
         response_content: str = response.content.decode('utf-8')
 
         self.assertIn('Login realizado com sucesso', response_content)
+        self.assertIn('Você está logado como adao123', response_content)
+        self.assertIn('Clique aqui para sair', response_content)
 
     def test_login_create_user_is_not_authenticated(self) -> None:
         self.user_data.update({
@@ -90,3 +92,23 @@ class AuthorsLoginViewTest(TestCase):
         )
 
         self.assertEqual(response.func, views.logout_view)
+
+    def test_url_logout_ok(self) -> None:
+        url_login: str = reverse('authors:login_create')
+        url_logout: str = reverse('authors:logout')
+
+        self.client.post(
+            url_login,
+            data=self.user_data,
+            follow=True
+        )
+
+        response_logout: HttpResponse = self.client.post(
+            url_logout,
+            data=self.user_data,
+            follow=True
+        )
+        response_content: str = response_logout.content.decode('utf-8')
+
+        self.assertIn('Logout realizado com sucesso', response_content)
+        

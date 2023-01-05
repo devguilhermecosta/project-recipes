@@ -1,9 +1,16 @@
 <!-- header -->
 <header>
     <div class="container-user">
-        <p><a href="{% url 'authors:register' %}">Cadastre-se</a>
-        ou
-        <a href="{% url 'authors:login' %}">faça login</a>
+        {% if request.user.is_authenticated %}
+            você está logado como 
+            <a href="{% url 'authors:login' %}">
+                <strong>{{ request.user.username }}</strong>
+            </a>
+        {% else %}
+            <p><a href="{% url 'authors:register' %}">Cadastre-se</a>
+            ou
+            <a href="{% url 'authors:login' %}">faça login</a>
+        {% endif %}
         </p>
     </div>
     <div class="container-header flex-center">

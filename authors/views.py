@@ -83,4 +83,5 @@ def logout_view(request) -> None:
         return redirect(reverse('authors:login'))
 
     logout(request)  # faz o logout
+    messages.success(request, 'Logout realizado com sucesso')
     return redirect(reverse('authors:login'))  # redireciona para a página de login  # noqa: E501
