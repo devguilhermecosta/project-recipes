@@ -111,4 +111,3 @@ class AuthorsLoginViewTest(TestCase):
         response_content: str = response_logout.content.decode('utf-8')
 
         self.assertIn('Logout realizado com sucesso', response_content)
-        
