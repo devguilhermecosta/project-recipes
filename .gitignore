@@ -3,6 +3,7 @@
 *.pot
 *.pyc
 __pycache__
+.browser.py.
 
 # Backup files #
 *.bak

@@ -1,3 +1,4 @@
+import sys
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -6,9 +7,16 @@ from time import sleep
 from pathlib import Path
 
 ROOT_PATH = Path(__file__).parent.parent  # raiz do projeto
-CHROMEDRIVER_NAME = 'chromedriver.exe'  # passamos o nome do driver a ser usado  # noqa: E501
+
+if sys.platform == 'linux':
+    CHROMEDRIVER_NAME = 'chromedriver_linux'  # passamos o nome do driver a ser usado  # noqa: E501
+else:
+    CHROMEDRIVER_NAME = 'chromedriver_windows.exe'
+
 CHROMEDRIVER_PATH = str(ROOT_PATH / 'bin' / CHROMEDRIVER_NAME)  # passamos o caminho do driver  # noqa: E501
 # para executar em outro pc basta alterar a variável CHROMEDRIVER_NAME, se necessário  # noqa: E501
+
+system = sys.platform
 
 
 def make_chrome_browser(*options) -> WebDriver:
