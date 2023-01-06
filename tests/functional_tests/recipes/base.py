@@ -1,8 +1,6 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from utils.browser import make_chrome_browser
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webelement import WebElement
 
 
 class RecipeBaseFunctionalTest(StaticLiveServerTestCase):
@@ -13,11 +11,3 @@ class RecipeBaseFunctionalTest(StaticLiveServerTestCase):
     def tearDown(self) -> None:
         self.browser.quit()
         return super().tearDown()
-
-
-class RecipeHomePageFunctionalTestCase(RecipeBaseFunctionalTest):
-    def test_home_page_whitout_recipes_no_recipe_found(self) -> None:
-        self.browser.get(self.live_server_url)
-        body: WebElement = self.browser.find_element(By.TAG_NAME, 'body')
-
-        self.assertIn('No recipe found', body.text)
