@@ -16,7 +16,7 @@ class RecipeBaseFunctionalTest(StaticLiveServerTestCase):
 
 
 class RecipeHomePageFunctionalTestCase(RecipeBaseFunctionalTest):
-    def test_the_test(self) -> None:
+    def test_home_page_whitout_recipes_no_recipe_found(self) -> None:
         self.browser.get(self.live_server_url)
         body: WebElement = self.browser.find_element(By.TAG_NAME, 'body')
 
