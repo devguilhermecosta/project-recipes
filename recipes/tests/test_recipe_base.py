@@ -3,10 +3,7 @@ from recipes.models import Recipe, Category
 from django.contrib.auth.models import User
 
 
-class RecipeTestBase(TestCase):
-    def setUp(self) -> None:
-        return super().setUp()
-
+class RecipeMixin:
     def make_category(self, name='Category') -> Category:
         return Category.objects.create(name=name)
 
@@ -24,6 +21,8 @@ class RecipeTestBase(TestCase):
                                         password=password,
                                         email=email,
                                         )
+
+        # continuação do código ->
 
     def make_recipe(self,
                     title='Recipe title',
@@ -58,3 +57,17 @@ class RecipeTestBase(TestCase):
             category=self.make_category(**category),
             author=self.make_author(**author),
         )
+
+    def make_recipe_in_batch(self, qty: int = 10) -> list:
+        recipes: list = []
+
+        for i in range(qty):
+            kwargs: dict = {'slug': f's-{i}', 'author': {'username': f'u{i}'}}
+            recipes.append(self.make_recipe(**kwargs))
+
+        return recipes
+
+
+class RecipeTestBase(TestCase, RecipeMixin):
+    def setUp(self) -> None:
+        return super().setUp()

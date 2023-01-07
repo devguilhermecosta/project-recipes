@@ -17,8 +17,6 @@ else:
 CHROMEDRIVER_PATH = str(ROOT_PATH / 'bin' / CHROMEDRIVER_NAME)  # passamos o caminho do driver  # noqa: E501
 # para executar em outro pc basta alterar a variável CHROMEDRIVER_NAME, se necessário  # noqa: E501
 
-system = sys.platform
-
 
 def make_chrome_browser(*options) -> WebDriver:
     chrome_options: ChromeOptions = webdriver.ChromeOptions()

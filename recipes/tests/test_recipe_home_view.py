@@ -58,9 +58,7 @@ class RecipesHomeViewTest(RecipeTestBase):
         self.assertIn(recipe.title, response_content)
 
     def test_recipe_home_is_paginated(self) -> None:
-        for i in range(18):
-            kwargs: dict = {'slug': f's-{i}', 'author': {'username': f'u{i}'}}
-            self.make_recipe(**kwargs)
+        self.make_recipe_in_batch(qty=18)
 
         #  I edited the environment variable PER_PAGE to have 3 objects per page.  # noqa: E501
         #  As we have 18 recipes, we will have 6 pages
