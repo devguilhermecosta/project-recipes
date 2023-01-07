@@ -62,7 +62,10 @@ class RecipeMixin:
         recipes: list = []
 
         for i in range(qty):
-            kwargs: dict = {'slug': f's-{i}', 'author': {'username': f'u{i}'}}
+            kwargs: dict = {'title': f'Recipe Title-{i}',
+                            'slug': f's-{i}',
+                            'author': {'username': f'u{i}'},
+                            }
             recipes.append(self.make_recipe(**kwargs))
 
         return recipes
