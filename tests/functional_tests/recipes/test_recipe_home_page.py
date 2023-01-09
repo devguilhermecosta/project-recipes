@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 from recipes.tests.test_recipe_base import RecipeMixin
+from unittest.mock import patch
 from time import sleep
 
 
@@ -39,3 +40,26 @@ class RecipeHomePageFunctionalTestCase(RecipeBaseFunctionalTest, RecipeMixin):
 
         # the user see the result in browser
         self.assertIn('Recipe Title-1', recipe.text)
+
+    @patch('recipes.views.PER_PAGE', new=2)
+    def test_home_page_is_paginating(self) -> None:
+        # cria 10 receitas
+        self.make_recipe_in_batch()
+
+        # o usuário abre o site
+        self.browser.get(self.live_server_url)
+
+        # clica na página 2
+        page_2: WebElement = self.browser.find_element(
+            By.XPATH,
+            '//a[@aria-label="Go to page 2"]'
+        )
+        page_2.click()
+
+        # o usuário vê duas receitas
+        recipes: list[WebElement] = self.browser.find_elements(
+            By.CLASS_NAME,
+            'card-container'
+        )
+
+        self.assertEqual(len(recipes), 2)
