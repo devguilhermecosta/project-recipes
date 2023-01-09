@@ -7,7 +7,7 @@
                 <strong>{{ request.user.username }}</strong>
             </a>
         {% else %}
-            <p><a href="{% url 'authors:register' %}">Cadastre-se</a>
+            <p><a aria-label="cadastrar" href="{% url 'authors:register' %}">Cadastre-se</a>
             ou
             <a href="{% url 'authors:login' %}">faça login</a>
         {% endif %}

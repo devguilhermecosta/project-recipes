@@ -5,7 +5,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 from recipes.tests.test_recipe_base import RecipeMixin
 from unittest.mock import patch
-from time import sleep
 
 
 @pytest.mark.functional_test

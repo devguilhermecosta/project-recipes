@@ -59,7 +59,7 @@ class RegisterFormAuthorsIntegrationTest(DjangoTestCase):
         return super().setUp(*args, **kwargs)
 
     @parameterized.expand([
-        ('first_name', 'Este campo é obrigatório'),
+        ('first_name', 'O campo nome é obrigatório'),
         ('last_name', 'Este campo é obrigatório'),
         ('username', 'Este campo é obrigatório'),
         ('email', 'Este campo é obrigatório'),

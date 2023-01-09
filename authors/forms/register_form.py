@@ -34,7 +34,7 @@ class RegisterForm(forms.ModelForm):
         error_messages={
             'min_length': 'O campo nome deve ter pelo menos 4 caracteres',
             'max_length': 'O campo nome deve ter 128 caracteres ou menos',
-            'required': 'Este campo é obrigatório',
+            'required': 'O campo nome é obrigatório',
             })
 
     last_name: CharField = forms.CharField(
