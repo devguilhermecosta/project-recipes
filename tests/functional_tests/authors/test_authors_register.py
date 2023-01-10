@@ -2,14 +2,15 @@ import pytest
 from .base import BaseAuthorsFunctionalTests as BaseAuthor
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
-from time import sleep
 
 
 @pytest.mark.functional_test
 class AuthorsRegisterFunctionalTests(BaseAuthor):
+
     def fill_all_fields_dummy_data(self,
                                    form: WebElement,
-                                   content: str) -> None:
+                                   content: str,
+                                   length: int = 10) -> None:
         '''the content parameter will be written
         to all fields, except email'''
 
@@ -24,7 +25,7 @@ class AuthorsRegisterFunctionalTests(BaseAuthor):
                 if field.get_attribute('name') == 'email':
                     field.send_keys('email@email.com')
                 else:
-                    field.send_keys(content * 10)
+                    field.send_keys(content * length)
 
     def get_element_by_placeholder(self,
                                    web_element: WebElement,
@@ -36,7 +37,7 @@ class AuthorsRegisterFunctionalTests(BaseAuthor):
         )
         return element
 
-    def test_empty_first_name_field_error_message(self) -> None:
+    def open_register_form(self) -> WebElement:
         # abre o navegador
         self.browser.get(self.live_server_url)
 
@@ -53,15 +54,17 @@ class AuthorsRegisterFunctionalTests(BaseAuthor):
             '/html/body/main/div/form',
         )
 
+        return form
+
+    def test_empty_fields_error_messages(self) -> None:
+        # pega o formulário de cadastro
+        form: WebElement = self.open_register_form()
+
         # preenche o field first name
         self.fill_all_fields_dummy_data(form, ' ')
 
         # clica no botão enviar
-        button: WebElement = form.find_element(
-            By.XPATH,
-            '/html/body/main/div/form/div[7]/button',
-        )
-        button.click()
+        form.submit()
 
         # declaramos novamente o formulário,
         # caso contrário um erro do tipo
@@ -72,10 +75,41 @@ class AuthorsRegisterFunctionalTests(BaseAuthor):
             '/html/body/main/div/form',
         )
 
-        self.assertIn('O campo nome é obrigatório', form_2.text)
-        self.fail(('Fazer todos os testes para campos vazios. '
-                   'Refatorar o teste em pequenas funções. '
-                   'Tentar usar parameterized. '
-                   'Testar a função de callback. '
-                   'Testar o formulário corretamente preenchido. ')
-                  )
+        error_messages: list = [
+            'O campo nome é obrigatório',
+            'O campo sobrenome é obrigatório',
+            'O campo usuário é obrigatório',
+            'O campo senha é obrigatório',
+            'O campo repita a senha é obrigatório'
+        ]
+
+        for message in error_messages:
+            self.assertIn(message, form_2.text)
+
+    def test_fields_filled_correctly_succes_message(self) -> None:
+        form: WebElement = self.open_register_form()
+
+        fields: dict = {
+            'Digite seu nome': 'Guilherme',
+            'Digite seu sobrenome': 'Costa',
+            'Digite seu usuário': 'guicosta',
+            'Digite seu e-mail': 'email@email.com',
+            'Digite a senha': 'Password123@@',
+            'Repita a senha': 'Password123@@',
+        }
+
+        for placeholder, content in fields.items():
+            element: WebElement = self.get_element_by_placeholder(
+                form,
+                placeholder,
+                )
+            element.send_keys(content)
+
+        form.submit()
+
+        form_2: WebElement = self.browser.find_element(
+            By.XPATH,
+            '/html/body/main/div/form',
+        )
+
+        self.assertIn('Usuário criado com sucesso.', form_2.text)

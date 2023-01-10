@@ -45,7 +45,7 @@ class RegisterForm(forms.ModelForm):
             'placeholder': 'Digite seu sobrenome',
         }),
         error_messages={
-            'required': 'Este campo é obrigatório',
+            'required': 'O campo sobrenome é obrigatório',
             'min_length': 'O campo sobrenome deve ter pelo menos 4 caracteres',
             'max_length': 'O campo sobrenome deve ter 128 caracteres ou menos',
         },
@@ -59,7 +59,7 @@ class RegisterForm(forms.ModelForm):
             'placeholder': 'Digite seu usuário',
         }),
         error_messages={
-            'required': 'Este campo é obrigatório',
+            'required': 'O campo usuário é obrigatório',
             'min_length': 'O campo usuário deve ter pelo menos 4 caracteres',
             'max_length': 'O campo usuário deve ter 128 caracteres ou menos',
         },
@@ -85,7 +85,7 @@ class RegisterForm(forms.ModelForm):
                                    'placeholder': 'Digite a senha',
                                    }),
                                error_messages={
-                                   'required': 'Este campo é obrigatório',
+                                   'required': 'O campo senha é obrigatório',
                                    'min_length': 'A senha deve ter pelo menos 8 caracteres',  # noqa: E501
                                    'max_length': 'O campo senha deve ter 128 caracteres ou menos',  # noqa: E501
                                },
@@ -100,7 +100,7 @@ class RegisterForm(forms.ModelForm):
                                     }),
                                 error_messages={
                                     'invalid': 'Verifique seus dados',
-                                    'required': 'Este campo é obrigatório',
+                                    'required': 'O campo repita a senha é obrigatório',  # noqa: E501
                                     'min_length': 'A senha deve ter pelo menos 8 caracteres',  # noqa: E501
                                     'max_length': 'O campo senha deve ter 128 caracteres ou menos',  # noqa: E501
                                 },
