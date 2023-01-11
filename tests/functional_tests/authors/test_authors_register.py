@@ -7,36 +7,6 @@ from selenium.webdriver.common.by import By
 @pytest.mark.functional_test
 class AuthorsRegisterFunctionalTests(BaseAuthor):
 
-    def fill_all_fields_dummy_data(self,
-                                   form: WebElement,
-                                   content: str,
-                                   length: int = 10) -> None:
-        '''the content parameter will be written
-        to all fields, except email'''
-
-        # seleciona todos os campos do form
-        fields: list[WebElement] = form.find_elements(
-            By.TAG_NAME,
-            'input',
-        )
-
-        for field in fields:
-            if field.is_displayed():
-                if field.get_attribute('name') == 'email':
-                    field.send_keys('email@email.com')
-                else:
-                    field.send_keys(content * length)
-
-    def get_element_by_placeholder(self,
-                                   web_element: WebElement,
-                                   placeholder: str,
-                                   ) -> WebElement:
-        element: WebElement = web_element.find_element(
-            By.XPATH,
-            f'//input[@placeholder="{placeholder}"]'
-        )
-        return element
-
     def open_register_form(self) -> WebElement:
         # abre o navegador
         self.browser.get(self.live_server_url)
