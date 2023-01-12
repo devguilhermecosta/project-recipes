@@ -35,7 +35,7 @@ class AuthorsLoginViewTest(TestCase):
     def test_url_register_create_load_correct_view(self) -> None:
         url: ResolverMatch = resolve(
             reverse('authors:register_create')
-            )
+        )
         self.assertEqual(url.func, views.register_create)
 
     def test_url_login_load_correc_view(self) -> None:
@@ -64,7 +64,7 @@ class AuthorsLoginViewTest(TestCase):
             reverse('authors:login_create'),
             data=self.user_data,
             follow=True,
-            )
+        )
         response_content: str = response.content.decode('utf-8')
 
         self.assertIn('Login realizado com sucesso', response_content)
@@ -111,3 +111,50 @@ class AuthorsLoginViewTest(TestCase):
         response_content: str = response_logout.content.decode('utf-8')
 
         self.assertIn('Logout realizado com sucesso', response_content)
+
+
+class AuthorsLogoutViewTest(TestCase):
+    def setUp(self) -> None:
+        User.objects.create_user(username='gui', password='123')
+        self.client.login(username='gui', password='123')
+
+        return super().setUp()
+
+    def test_logout_message_error_if_method_get(self) -> None:
+        response: HttpResponse = self.client.get(
+            reverse('authors:logout'),
+            follow=True,
+        )
+
+        self.assertIn(
+            'Invalid request',
+            response.content.decode('utf-8'),
+        )
+
+    def test_logout_message_error_if_invalid_credentials(self) -> None:
+        response: HttpResponse = self.client.post(
+            reverse('authors:logout'),
+            follow=True,
+            data={
+                'username': 'other_user',
+            }
+        )
+
+        self.assertIn(
+            'Invalid credentials',
+            response.content.decode('utf-8'),
+        )
+
+    def test_logout_message_succes_if_correct_data(self) -> None:
+        response: HttpResponse = self.client.post(
+            reverse('authors:logout'),
+            follow=True,
+            data={
+                'username': 'gui',
+            }
+        )
+
+        self.assertIn(
+            'Logout realizado com sucesso',
+            response.content.decode('utf-8'),
+        )
