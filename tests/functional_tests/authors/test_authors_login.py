@@ -20,6 +20,50 @@ class AuthorsLoginFunctionalTests(BaseAutor):
                       self.get_body_text()
                       )
 
+    def test_login_error_message_if_invalid_credentials(self) -> None:
+        # usuário abre o navegador
+        self.browser.get(self.live_server_url)
+
+        # usuário clica em faça login
+        self.browser.find_element(
+            By.XPATH,
+            '/html/body/header/div[1]/p/a[2]'
+        ).click()
+
+        # usuário fictício
+        user: User = User.objects.create_user(username='gui',
+                                              password='123456',
+                                              )
+        user.save()
+
+        # usuário preenche usuário e senha
+        form: WebElement = self.browser.find_element(
+            By.CLASS_NAME,
+            'form',
+        )
+
+        username: WebElement = self.get_element_by_placeholder(
+            form,
+            'Digite seu usuário'
+        )
+        username.send_keys(user.username)
+
+        password: WebElement = self.get_element_by_placeholder(
+            form,
+            'Digite sua senha'
+        )
+        password.send_keys('12345')  # senha incorreta
+
+        # usuário clica em enviar
+        form.submit()
+
+        self.assertIn(
+            'Usuário ou senha inválidos.',
+            self.browser.find_element(
+                By.TAG_NAME,
+                'body').text
+        )
+
     def test_login_succes_message(self) -> None:
         # usuário entra na home
         self.browser.get(self.live_server_url)
@@ -56,7 +100,3 @@ class AuthorsLoginFunctionalTests(BaseAutor):
         self.assertIn('Login realizado com sucesso',
                       self.get_body_text(),
                       )
-
-    def test_the_test(self) -> None:
-        self.fail(('continuar os testes de login. '
-                   'Seguir o coverage. '))
