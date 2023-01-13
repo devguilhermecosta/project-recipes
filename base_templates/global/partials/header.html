@@ -3,7 +3,7 @@
     <div class="container-user">
         {% if request.user.is_authenticated %}
             você está logado como 
-            <a href="{% url 'authors:login' %}">
+            <a href="{% url 'authors:dashboard' %}">
                 <strong>{{ request.user.username }}</strong>
             </a>
         {% else %}

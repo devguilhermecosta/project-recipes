@@ -414,7 +414,7 @@ header {
     position: relative;
 }
 
-.messages_element {
+/* .messages_element {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -433,7 +433,7 @@ header {
     color: var(--text-messages-element);
     font-weight: bolder;
     font-size: 10px;
-}
+} */
 
 .message-debug {
     background-color: var(--bg-message-debug);

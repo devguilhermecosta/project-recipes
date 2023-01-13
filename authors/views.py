@@ -71,7 +71,7 @@ def login_create(request) -> None:
         else:
             messages.error(request, 'Usuário ou senha inválidos.')
 
-    return redirect('authors:login')
+    return redirect('authors:dashboard')
 
 
 @login_required(redirect_field_name='next', login_url='authors:login')
@@ -87,3 +87,10 @@ def logout_view(request) -> None:
     logout(request)  # faz o logout
     messages.success(request, 'Logout realizado com sucesso')
     return redirect(reverse('authors:login'))  # redireciona para a página de login  # noqa: E501
+
+
+@login_required(redirect_field_name='next', login_url='authors:login')
+def dashboard(request: HttpRequest) -> render:
+    return render(request, 'authors/pages/dashboard.html', context={
+        'form_title': 'Dashboard',
+    })
