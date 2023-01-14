@@ -116,12 +116,14 @@ def dashboard(request: HttpRequest) -> render:
 
 
 def dashboard_recipe_edit(request: HttpRequest, id: int) -> render:
-    recipe: Recipe = Recipe.objects.filter(pk=id,
-                                           author=request.user,
-                                           is_published=False,
-                                           )
+    recipe: Recipe = Recipe.objects.get(pk=id,
+                                        author=request.user,
+                                        is_published=False,
+                                        )
 
-    form = RecipeEditForm()
+    form = RecipeEditForm(request.POST or None,
+                          instance=recipe,
+                          )
 
     return render(request, 'authors/pages/dashboard_recipe.html', context={
         'recipe': recipe,

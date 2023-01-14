@@ -547,6 +547,11 @@ header {
     color: var(--text-message-default);
 }
 
+.RA__title {
+    margin: 0 auto;
+    text-align: center;
+}
+
 input[id="id_password"] {
     display: block;
 }
