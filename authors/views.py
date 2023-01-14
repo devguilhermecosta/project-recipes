@@ -13,6 +13,11 @@ from recipes.models import Recipe
 
 from utils.pagination import make_pagination
 
+import os
+
+
+PER_PAGE_USER = os.environ.get("PER_PAGE_USER", 6)
+
 
 def register_view(request: HttpRequest) -> render:
     register_form_data: SessionBase = request.session.get('register_form_data',
@@ -101,7 +106,7 @@ def dashboard(request: HttpRequest) -> render:
 
     page_object, pagination_range = make_pagination(request,
                                                     recipes,
-                                                    6)
+                                                    PER_PAGE_USER)
 
     return render(request, 'authors/pages/dashboard.html', context={
         'form_title': 'Dashboard',
