@@ -7,7 +7,7 @@ from django.http import Http404, HttpRequest
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from authors.forms import RegisterForm, LoginForm
+from authors.forms import RegisterForm, LoginForm, RecipeEditForm
 
 from recipes.models import Recipe
 
@@ -112,4 +112,18 @@ def dashboard(request: HttpRequest) -> render:
         'form_title': 'Dashboard',
         'recipes': page_object,
         'pagination_range': pagination_range,
+    })
+
+
+def dashboard_recipe_edit(request: HttpRequest, id: int) -> render:
+    recipe: Recipe = Recipe.objects.filter(pk=id,
+                                           author=request.user,
+                                           is_published=False,
+                                           )
+
+    form = RecipeEditForm()
+
+    return render(request, 'authors/pages/dashboard_recipe.html', context={
+        'recipe': recipe,
+        'form': form,
     })

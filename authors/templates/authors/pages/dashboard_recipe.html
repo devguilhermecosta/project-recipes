@@ -1,0 +1,15 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Dashboard |{% endblock title %}
+
+{% block content %}
+
+<div class="form-container center-flex">
+    <h1>{{ form_title }}</h1>
+</div>
+
+{% include 'global/partials/messages.html' %}
+
+{% include 'global/partials/form.html' %}
+
+{% endblock content %}

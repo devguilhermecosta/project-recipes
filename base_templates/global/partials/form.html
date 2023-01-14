@@ -1,38 +1,36 @@
 <div class="form-container center-flex">
     <h1>{{ form_title }}</h1>
 
-    {% if not user.is_authenticated %}
-        <form class="form" action="{{ form_action }}" method="POST">
-            {% csrf_token %}
+    <form class="form" action="{{ form_action }}" method="POST">
+        {% csrf_token %}
 
-            {% for field in form %}
-                <div>
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
+        {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
 
-                    {% if field.help_text %}
-                        <p class="help-text">{{ field.help_text }}</p>
-                    {% endif %}
+                {% if field.help_text %}
+                    <p class="help-text">{{ field.help_text }}</p>
+                {% endif %}
 
-                    {{ field.errors }}
-                </div>
-            {% endfor %}
-            
-            {% if form.errors %}
-                <div class="button-container">
-                    <div class="messages message-error">
-                        <p>Existem erros no formulário. Corrija para continuar</p>
-                    </div>
-                </div>
-            {% endif %}
-
-            
-
-            <div class="button-container">
-                <button type="submit">Send</button>
+                {{ field.errors }}
             </div>
-        </form>
-    {% endif %}
+        {% endfor %}
+        
+        {% if form.errors %}
+            <div class="button-container">
+                <div class="messages message-error">
+                    <p>Existem erros no formulário. Corrija para continuar</p>
+                </div>
+            </div>
+        {% endif %}
+
+        
+
+        <div class="button-container">
+            <button type="submit">Send</button>
+        </div>
+    </form>
 
     {% include 'global/partials/messages.html' %}
 
