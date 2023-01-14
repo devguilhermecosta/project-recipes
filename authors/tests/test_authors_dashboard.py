@@ -1,7 +1,8 @@
-from django.test import TestCase
-from django.urls import reverse, resolve, ResolverMatch
-from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.test import TestCase
+from django.urls import ResolverMatch, resolve, reverse
+
 from authors import views
 
 
@@ -19,8 +20,18 @@ class AuthorsDashboardTests(TestCase):
         self.assertEqual(response.func, views.dashboard)
 
     def test_dashboard_load_correct_template(self) -> None:
+        User.objects.create_user(username='gui',
+                                 password='123',
+                                 )
+
+        self.client.login(
+            username='gui',
+            password='123'
+        )
+
         response: HttpResponse = self.client.get(
-            reverse('authors:dashboard')
+            reverse('authors:dashboard'),
+            follow=True,
         )
 
         self.assertTemplateUsed(response, 'authors/pages/dashboard.html')
@@ -31,7 +42,7 @@ class AuthorsDashboardTests(TestCase):
         response: HttpResponse = self.client.get(
             url,
             follow=True
-            )
+        )
 
         self.assertEqual(response.status_code, 200)
 

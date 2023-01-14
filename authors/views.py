@@ -9,6 +9,10 @@ from django.urls import reverse
 
 from authors.forms import RegisterForm, LoginForm
 
+from recipes.models import Recipe
+
+from utils.pagination import make_pagination
+
 
 def register_view(request: HttpRequest) -> render:
     register_form_data: SessionBase = request.session.get('register_form_data',
@@ -91,6 +95,16 @@ def logout_view(request) -> None:
 
 @login_required(redirect_field_name='next', login_url='authors:login')
 def dashboard(request: HttpRequest) -> render:
+    recipes: list[object] = Recipe.objects.filter(author=request.user,
+                                                  is_published=False,
+                                                  )
+
+    page_object, pagination_range = make_pagination(request,
+                                                    recipes,
+                                                    6)
+
     return render(request, 'authors/pages/dashboard.html', context={
         'form_title': 'Dashboard',
+        'recipes': page_object,
+        'pagination_range': pagination_range,
     })

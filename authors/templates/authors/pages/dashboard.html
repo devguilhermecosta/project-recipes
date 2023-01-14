@@ -12,4 +12,17 @@
 
 {% include 'authors/partials/messages_login.html' %}
 
+<div class="RA_container">
+    <h2>Recipes created at <strong>{{ user }}</strong></h2>
+    <ul>
+        {% for recipe in recipes %}
+            <li class="RA__item">
+                <a href="#">{{ recipe.title }} - Criado em: {{ recipe.created_at|date:"d/m/Y" }}</a>
+            </li>
+        {% empty %}
+            <p>No recipes registred</p>
+        {% endfor %}
+    </ul>
+</div>
+
 {% endblock content %}

@@ -520,6 +520,33 @@ header {
     cursor: pointer;
 }
 
+.RA_container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 30px;
+    background-color: var(--text-white);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 2px 2px 5px 3px rgba(0, 0, 0, 0.322);
+}
+
+.RA__item {
+    list-style-type: none;
+    margin: 5px 0;
+}
+
+.RA__item a {
+    color: var(--text-card);
+    font-size: 18px;
+    text-decoration: none;
+    transform: all 300ms ease;
+}
+
+.RA__item a:hover {
+    color: var(--text-message-default);
+}
+
 input[id="id_password"] {
     display: block;
 }

@@ -78,8 +78,8 @@ class AuthorsRegisterFunctionalTests(BaseAuthor):
         form.submit()
 
         form_2: WebElement = self.browser.find_element(
-            By.XPATH,
-            '/html/body/main/div/form',
+            By.TAG_NAME,
+            'body',
         )
 
         self.assertIn('Usuário criado com sucesso.', form_2.text)
