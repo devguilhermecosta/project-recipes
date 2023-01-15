@@ -552,6 +552,104 @@ header {
     text-align: center;
 }
 
+/* START FORM EDIT RECIPE*/
+
+.FR__container {
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+.FR__form {
+    width: 100%;
+    max-width: 620px;
+    padding: 5px 10px;
+}
+
+.FR__div {
+    width: 100%;
+    max-width: 600px;
+    margin: 10px 0;
+}
+
+.FR__div > label {
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+.FR__div > input {
+    width: 100%;
+    height: 40px;
+    padding: 0 5px;
+    font-size: 16px;
+    border: 1px solid var(--bg-input-search);
+    border-radius: 10px;
+    outline: none;
+}
+
+.FR__div > textarea {
+    width: 100%;
+    display: block;
+    padding: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+    resize: none;
+}
+
+.FR__div:nth-of-type(9) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+}
+
+.FR__div > a {
+    width: 100%;
+    max-width: 100%;
+    margin: 10px 0;
+    font-size: 14px;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.FR__div input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin-bottom: 10px;
+    display: inline;
+    width: 30px;
+}
+
+.FR__div input[type="file"] {
+    border: none;
+    outline: none;
+    padding: 0;
+    border-radius: 0;
+}
+
+.FR__button {
+    text-align: center;
+}
+
+.FR__button button[type="submit"] {
+    width: 60px;
+    height: 45px;
+    background-color: var(--bg-menu);
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    color: var(--bg-card-details);
+    font-weight: bolder;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.FR__button button[type="submit"]:hover {
+    opacity: 0.6;
+}
+
+/* END FORM EDIT RECIPE */
+
 input[id="id_password"] {
     display: block;
 }
