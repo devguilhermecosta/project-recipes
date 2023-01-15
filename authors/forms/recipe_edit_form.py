@@ -10,6 +10,7 @@ class RecipeEditForm(forms.ModelForm):
         exclude = ['is_published',
                    'preparation_steps_is_html',
                    'author',
+                   'slug',
                    ]
 
         widgets = {

@@ -1,7 +1,12 @@
 <div class="center-flex FR__container">
     <h1>{{ form_title }}</h1>
 
-    <form class="FR__form" action="{{ form_action }}" method="POST">
+    <form 
+        class="FR__form"
+        action="{{ form_action }}"
+        method="POST"
+        enctype="multipart/form-data"
+    >
         {% csrf_token %}
 
         {% for field in form %}
