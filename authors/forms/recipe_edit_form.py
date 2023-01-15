@@ -11,3 +11,20 @@ class RecipeEditForm(forms.ModelForm):
                    'preparation_steps_is_html',
                    'author',
                    ]
+
+        widgets = {
+            'preparation_time_unit': forms.Select(choices=(
+                ('minuto(s)', 'minuto(s)'),
+                ('hora(s)', 'hora(s)'),
+                ('dia(s)', 'dias(s)')
+                )
+            ),
+            'servings_unit': forms.Select(choices=(
+                ('pessoa(s)', 'pessoa(s)'),
+                ('porção', 'porção'),
+                ('porções', 'porções'),
+            )),
+            'cover': forms.FileInput(attrs={
+                'class': 'RF__image',
+                }),
+        }

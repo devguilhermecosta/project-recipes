@@ -648,6 +648,10 @@ header {
     opacity: 0.6;
 }
 
+.RF__image > img {
+    max-width: 100%;
+}
+
 /* END FORM EDIT RECIPE */
 
 input[id="id_password"] {

@@ -14,6 +14,12 @@
                 {% endif %}
 
                 {{ field.errors }}
+
+                {% if field.value.url %}
+                <div class="RF__image">
+                    <img src="{{ field.value.url }}" alt="">
+                </div>
+            {% endif %}
             </div>
         {% endfor %}
         
@@ -25,7 +31,6 @@
             </div>
         {% endif %}
 
-        
 
         <div class="FR__button">
             <button type="submit">Send</button>
