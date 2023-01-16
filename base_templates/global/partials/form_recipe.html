@@ -20,7 +20,7 @@
 
                 {{ field.errors }}
 
-                {% if field.value.url %}
+                {% if field.name == 'cover' and field.value.url %}
                 <div class="RF__image">
                     <img src="{{ field.value.url }}" alt="">
                 </div>

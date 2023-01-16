@@ -145,3 +145,32 @@ def dashboard_recipe_edit(request: HttpRequest, id: int) -> render:
         'recipe': recipe,
         'form': form,
     })
+
+
+def dashboard_new_recipe(request: HttpRequest) -> render:
+    form: RecipeEditForm = RecipeEditForm(
+        data=request.POST or None,
+        files=request.FILES or None,
+    )
+
+    if form.is_valid():
+        recipe = form.save(commit=False)
+
+        recipe.author = request.user
+        recipe.preparation_steps_is_html = False
+        recipe.is_published = False
+
+        recipe.save()
+
+        messages.success(request, 'Receita salva com sucesso')
+
+        return redirect(
+            reverse('authors:dashboard')
+        )
+
+    else:
+        messages.error(request, 'Existem erros em sua receita')
+
+    return render(request, 'authors/pages/dashboard_recipe.html', context={
+        'form': form,
+    })
