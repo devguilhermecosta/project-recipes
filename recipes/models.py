@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.text import slugify
 
 
 class Category(models.Model):
@@ -43,3 +44,10 @@ class Recipe(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+    def save(self, *args, **kwars) -> None:
+        if not self.slug:
+            slug = f'{slugify(self.title)}'
+            self.slug = slug
+
+        return super().save(*args, **kwars)

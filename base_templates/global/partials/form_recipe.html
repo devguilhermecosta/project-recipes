@@ -18,30 +18,19 @@
                     <p class="help-text">{{ field.help_text }}</p>
                 {% endif %}
 
-                {{ field.errors }}
-
                 {% if field.name == 'cover' and field.value.url %}
                 <div class="RF__image">
                     <img src="{{ field.value.url }}" alt="">
                 </div>
-            {% endif %}
+                {% endif %}
+
+                {{ field.errors }}
             </div>
         {% endfor %}
-        
-        {% if form.errors %}
-            <div class="button-container">
-                <div class="messages message-error">
-                    <p>Existem erros no formulário. Corrija para continuar</p>
-                </div>
-            </div>
-        {% endif %}
-
 
         <div class="FR__button">
             <button type="submit">Send</button>
         </div>
     </form>
-
-    {% include 'global/partials/messages.html' %}
 
 </div>

@@ -151,7 +151,7 @@ def dashboard_new_recipe(request: HttpRequest) -> render:
     form: RecipeEditForm = RecipeEditForm(
         data=request.POST or None,
         files=request.FILES or None,
-    )
+    )  # aqui não usamos o parâmetro instance
 
     if form.is_valid():
         recipe = form.save(commit=False)
@@ -168,9 +168,35 @@ def dashboard_new_recipe(request: HttpRequest) -> render:
             reverse('authors:dashboard')
         )
 
-    else:
-        messages.error(request, 'Existem erros em sua receita')
-
     return render(request, 'authors/pages/dashboard_recipe.html', context={
         'form': form,
     })
+
+
+def dashboard_delete_recipe(request: HttpRequest) -> render:
+    #  checamos se o método e POST
+    if not request.POST:
+        raise Http404()
+
+    # de dentro de POST, capturamos o id da receita
+    POST = request.POST
+    id = POST.get('id')
+
+    # selecionamos a receita pelo id, autor e publicação
+    recipe: Recipe = Recipe.objects.get(pk=id,
+                                        is_published=False,
+                                        author=request.user,
+                                        )
+
+    # erro caso a receita não tenha sido encontrada
+    if not recipe:
+        raise Http404()
+
+    # deleta a receita se encontrada e mensagem de sucesso
+    recipe.delete()
+    messages.success(request, 'Receita deletada com sucesso.')
+
+    # retorna para página inicial da dashboard
+    return redirect(
+        reverse('authors:dashboard')
+        )

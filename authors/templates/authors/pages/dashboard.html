@@ -16,9 +16,19 @@
     <h2>Recipes created at <strong>{{ user }}</strong></h2>
     <ul>
         {% for recipe in recipes %}
-            <li class="RA__item">
-                <a href="{% url 'authors:dashboard_recipe_edit' recipe.id %}">{{ recipe.title }} - Criado em: {{ recipe.created_at|date:"d/m/Y" }}</a>
-            </li>
+            <div class="RA__div">
+                <li class="RA__item">
+                    <a href="{% url 'authors:dashboard_recipe_edit' recipe.id %}">{{ recipe.title }} - Criado em: {{ recipe.created_at|date:"d/m/Y" }}</a>
+                </li>
+                <form action="{% url 'authors:delete_recipe' %}"
+                method="POST"
+                class="RA__delete_button"
+                >
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ recipe.id }}">
+                    <button type="submit">Deletar</button>
+                </form>
+            </div>
         {% empty %}
             <p>No recipes registred</p>
         {% endfor %}

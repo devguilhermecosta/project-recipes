@@ -16,6 +16,33 @@ function openMenu() {
     }
 }
 
+function deleteRecipe() {
+    // pega todos os botões de deletar do formulário
+    const forms = document.querySelectorAll('.RA__delete_button');
+
+    // laço for of
+    for (const form of forms) {
+        // adiciona evento de submit em cada botão
+        form.addEventListener('submit', function(event) {
+            // isso previne o envio padão do formulário ao servidor
+            event.preventDefault();
+
+            // criamos um alert de confirmação no navegador
+            const toConfirm = confirm('Deseja realmente deletar a receita?');
+    
+            // se for confirmado, o formulário é enviado ao servidor e a receita
+            // é deletada
+            if (toConfirm) {
+                form.submit();
+            };
+
+        })
+    }
+};
+
+// chama a função
+deleteRecipe();
+
 document.addEventListener("click", function(event) {
     const element = event.target;
 
