@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
+from django.urls import reverse
 
 
 class Category(models.Model):
@@ -44,6 +45,9 @@ class Recipe(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+    def get_absolute_url(self):
+        return reverse("recipes:recipe", args=(self.id,))
 
     def save(self, *args, **kwars) -> None:
         if not self.slug:
