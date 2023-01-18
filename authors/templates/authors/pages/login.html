@@ -4,6 +4,8 @@
 
 {% block content %}
 
+{% include 'global/partials/messages.html' %}
+
 {% if not user.is_authenticated %}
     {% include 'global/partials/form.html' %}
 {% endif %}
