@@ -121,7 +121,7 @@ class RecipeDetailsView(DetailView):
         return query_set
 
     def get_context_data(self, *args, **kwargs) -> dict:
-        context = super().get_context_data(**kwargs)
+        context = super().get_context_data(*args, **kwargs)
 
         recipe = context.get('recipe')
 
@@ -155,7 +155,10 @@ class RecipeDetailsView(DetailView):
 #                                                           is_published=True,
 #                                                           ).order_by('-id'))
 
-#     page_object, pagination_range = make_pagination(request, recipes, PER_PAGE)
+    # page_object, pagination_range = make_pagination(request,
+    #                                                 recipes,
+    #                                                 PER_PAGE,
+    #                                                 )
 
 #     return render(request, 'recipes/pages/category.html', context={
 #         'recipes': page_object,
@@ -179,7 +182,9 @@ class RecipeDetailsView(DetailView):
 #         is_published=True,
 #     ).order_by('-id')
 
-#     page_object, pagination_range = make_pagination(request, recipes, PER_PAGE)
+    # page_object, pagination_range = make_pagination(request,
+    #                                                 recipes,
+    #                                                 PER_PAGE)
 
 #     return render(request, 'recipes/pages/search.html', context={
 #         'page_title': f"Buscando por '{search_term}'",
