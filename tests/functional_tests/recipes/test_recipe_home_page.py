@@ -40,7 +40,7 @@ class RecipeHomePageFunctionalTestCase(RecipeBaseFunctionalTest, RecipeMixin):
         # the user see the result in browser
         self.assertIn('Recipe Title-1', recipe.text)
 
-    @patch('recipes.views.PER_PAGE', new=2)
+    @patch('recipes.views.all.PER_PAGE', new=2)
     def test_home_page_is_paginating(self) -> None:
         # cria 10 receitas
         self.make_recipe_in_batch()

@@ -8,13 +8,13 @@ from .test_recipe_base import RecipeTestBase
 class RecipesDetailsViewTest(RecipeTestBase):
     def test_recipe_details_view_is_correct(self) -> None:
         url: ResolverMatch = resolve(
-            reverse('recipes:recipe', kwargs={'id': 1},)
+            reverse('recipes:recipe', kwargs={'pk': 1},)
         )
-        self.assertIs(url.func, views.recipe)
+        self.assertIs(url.func.view_class, views.RecipeDetailsView)
 
     def test_recipe_details_return_404_if_no_recipes_found(self) -> None:
         response: HttpResponse = self.client.get(
-            reverse('recipes:recipe', kwargs={'id': 10000})
+            reverse('recipes:recipe', kwargs={'pk': 10000})
         )
 
         self.assertEqual(response.status_code, 404)
@@ -24,7 +24,7 @@ class RecipesDetailsViewTest(RecipeTestBase):
 
         response: HttpResponse = self.client.get(
             reverse('recipes:recipe', kwargs={
-                'id': recipe.id,
+                'pk': recipe.id,
             })
         )
 
@@ -37,7 +37,7 @@ class RecipesDetailsViewTest(RecipeTestBase):
 
         response: HttpResponse = self.client.get(
             reverse('recipes:recipe', kwargs={
-                'id': 1,
+                'pk': 1,
             })
         )
 

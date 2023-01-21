@@ -17,6 +17,14 @@ class TestRecipePagination(RecipeTestBase):
 
         self.assertEqual([1, 2, 3, 4], pagination)
 
+    def test_make_pagination_range_is_static_if_range_less_igual_4(self) -> None:  # noqa: E501
+        pagination: list[int] = make_pagination_range(
+            page_range=list(range(1, 4)),
+            qty_pages=4,
+            current_page=1,
+        )['pagination']
+
+        self.assertEqual([1, 2, 3], pagination)
 
     def test_first_range_is_static_if_current_page_is_less_than_middle_page(self) -> None:  # noqa: E501
         pagination_1: list[int] = make_pagination_range(

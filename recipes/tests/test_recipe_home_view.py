@@ -44,7 +44,7 @@ class RecipesHomeViewTest(RecipeTestBase):
         url: ResolverMatch = resolve(
             reverse('recipes:home')
         )
-        self.assertIs(url.func, views.home)
+        self.assertIs(url.func.view_class, views.RecipeHomeBase)
 
     def test_recipe_home_template_loads_recipes(self) -> None:
         recipe: Recipe = self.make_recipe()
@@ -62,7 +62,7 @@ class RecipesHomeViewTest(RecipeTestBase):
 
         #  I edited the environment variable PER_PAGE to have 3 objects per page.  # noqa: E501
         #  As we have 18 recipes, we will have 6 pages
-        with patch('recipes.views.PER_PAGE', new=3):
+        with patch('recipes.views.all.PER_PAGE', new=3):
             client: Client = Client()
             response: HttpResponse = client.get(
                 reverse('recipes:home')

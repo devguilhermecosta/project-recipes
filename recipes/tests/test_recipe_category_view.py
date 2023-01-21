@@ -11,11 +11,11 @@ class RecipesCategoryViewTest(RecipeTestBase):
             reverse('recipes:category', args=(1,))
         )
 
-        self.assertIs(url.func, views.category)
+        self.assertIs(url.func.view_class, views.RecipeCategory)
 
     def test_recipe_category_return_404_if_no_category_found(self) -> None:
         response: HttpResponse = self.client.get(
-            reverse('recipes:category', kwargs={'id': 5000})
+            reverse('recipes:category', kwargs={'category_id': 5000})
         )
 
         self.assertEqual(response.status_code, 404)
@@ -25,7 +25,7 @@ class RecipesCategoryViewTest(RecipeTestBase):
         self.make_recipe(title=needed_title)
 
         response: HttpResponse = self.client.get(
-            reverse('recipes:category', kwargs={'id': 1})
+            reverse('recipes:category', kwargs={'category_id': 1})
         )
 
         content: str = response.content.decode('utf-8')
@@ -37,7 +37,7 @@ class RecipesCategoryViewTest(RecipeTestBase):
 
         response: HttpResponse = self.client.get(
             reverse('recipes:recipe', kwargs={
-                'id': recipe.category.id,
+                'pk': recipe.category.id,
             })
         )
 

@@ -102,11 +102,12 @@ def logout_view(request) -> None:
 def dashboard(request: HttpRequest) -> render:
     recipes: list[object] = Recipe.objects.filter(author=request.user,
                                                   is_published=False,
-                                                  )
+                                                  ).order_by('-id')
 
     page_object, pagination_range = make_pagination(request,
                                                     recipes,
-                                                    PER_PAGE_USER)
+                                                    PER_PAGE_USER,
+                                                    )
 
     return render(request, 'authors/pages/dashboard.html', context={
         'form_title': 'Dashboard',
