@@ -25,7 +25,6 @@ def make_pagination_range(page_range: list[int],
     if len(page_range) <= qty_pages:
         start_range = 0
         stop_range = len(page_range)
-        pagination = page_range[start_range:stop_range]
 
     pagination = page_range[start_range:stop_range]
 
