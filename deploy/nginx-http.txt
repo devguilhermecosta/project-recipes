@@ -1,0 +1,108 @@
+# https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
+#
+# REPLACES
+# 34.135.53.5 = Replace with your domain
+# /home/guilherme/app_repo = Replace with the path to the folder for the project
+# /home/guilherme/app_repo/static = Replace with the path to the folder for static files
+# /home/guilherme/app_repo/media = Replace with the path to the folder for media files
+# cursodjango.socket = Replace with your unix socket name
+# 
+#
+# HTTP
+server {
+  listen 80;
+  listen [::]:80;
+  server_name 34.135.53.5;
+
+  # Add index.php to the list if you are using PHP
+  index index.html index.htm index.nginx-debian.html index.php;
+  
+  # ATTENTION: /home/guilherme/app_repo/static
+  location /static {
+    autoindex on;
+    alias /home/guilherme/app_repo/static;
+  }
+
+  # ATTENTION: /home/guilherme/app_repo/media 
+  location /media {
+    autoindex on;
+    alias /home/guilherme/app_repo/media;
+  }
+
+  # ATTENTION: cursodjango.socket
+  location / {
+    proxy_pass http://unix:/run/cursodjango.socket;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+  }
+
+  # deny access to .htaccess files, if Apache's document root
+  # concurs with nginx's one
+  #
+  location ~ /\.ht {
+    deny all;
+  }
+
+  location ~ /\. {
+    access_log off;
+    log_not_found off;
+    deny all;
+  }
+
+  gzip on;
+  gzip_disable "msie6";
+
+  gzip_comp_level 6;
+  gzip_min_length 1100;
+  gzip_buffers 4 32k;
+  gzip_proxied any;
+  gzip_types
+    text/plain
+    text/css
+    text/js
+    text/xml
+    text/javascript
+    application/javascript
+    application/x-javascript
+    application/json
+    application/xml
+    application/rss+xml
+    image/svg+xml;
+
+  access_log off;
+  #access_log  /var/log/nginx/34.135.53.5-access.log;
+  error_log   /var/log/nginx/34.135.53.5-error.log;
+}
+
+
+commandos
+
+    # Set timezone
+    # List - timedatectl list-timezones
+    # sudo timedatectl set-timezone America/Sao_Paulo
+    # sudo reboot
+
+    # criar o arquivo
+    sudo nano /etc/nginx/sites-available/nome_do_projeto
+        colar todos os dados acima
+    
+    #excluir o arquivo default
+    sudo rm /etc/nginx/sites-enabled/default
+
+    #cria um link simbólico da pasta site-available para site-enabled
+    sudo ln -s /etc/nginx/sites-available/cursodjango /etc/nginx/sites-enabled/cursodjango
+
+    #testar se a consiguração está correta
+    sudo nginx -t
+
+        -> devemos ter esta resposta:
+            nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+            nginx: configuration file /etc/nginx/nginx.conf test is successful
+
+    #reiniciar o nginx
+    sudo systemctl restart nginx
+    
+        -> pronto, já podemos acessar o site pelo IP
