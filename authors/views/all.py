@@ -64,7 +64,7 @@ def login_view(request) -> render:
 
 def login_create(request) -> None:
     if not request.POST:
-        raise Http404
+        raise Http404()
 
     form: LoginForm = LoginForm(request.POST)
 

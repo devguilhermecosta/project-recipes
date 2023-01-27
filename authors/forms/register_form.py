@@ -113,6 +113,7 @@ class RegisterForm(forms.ModelForm):
             'last_name',
             'username',
             'email',
+            'password',
         ]
 
     def clean_email(self) -> CharField | ValidationError:
