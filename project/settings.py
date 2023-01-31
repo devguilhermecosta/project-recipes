@@ -31,9 +31,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "INSECURE")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if os.environ.get("DEBUG") == '1' else False
+DEBUG = True if os.environ.get("DEBUG") == '0' else False
 
-ALLOWED_HOSTS: str = os.environ.get('ALLOWED_HOSTS', '')
+ALLOWED_HOSTS: list[str] = ['*']
 
 # Application definition
 
