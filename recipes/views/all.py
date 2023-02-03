@@ -23,6 +23,7 @@ class RecipeHomeBase(ListView):
     def get_queryset(self, *args, **kwargs) -> QuerySet:
         query_set: QuerySet = super().get_queryset(*args, **kwargs)
         query_set = query_set.filter(is_published=True)
+        query_set = query_set.select_related('author', 'category')
 
         return query_set
 
