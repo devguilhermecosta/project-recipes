@@ -33,7 +33,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "INSECURE")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS: str = ['*']
+ALLOWED_HOSTS: list[str] = ['*']
 
 # Application definition
 
@@ -44,12 +44,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'recipes',
     'authors',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -154,4 +156,10 @@ MESSAGE_TAGS = {
     constants.WARNING: 'message-warning',
 }
 
+<<<<<<< HEAD
 CSRF_TRUSTED_ORIGINS = ['https://recipes.devguilhermecosta.com']
+=======
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+>>>>>>> 5b5b3a995ced92c26efe93bb4230fe282f414a7b

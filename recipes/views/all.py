@@ -5,6 +5,9 @@ from utils.pagination import make_pagination
 from django.views.generic import ListView, DetailView
 from recipes.models import Recipe
 from django.db.models.query import QuerySet
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
+from typing import Dict
 
 
 PER_PAGE = os.environ.get("PER_PAGE", 9)
@@ -20,6 +23,7 @@ class RecipeHomeBase(ListView):
     def get_queryset(self, *args, **kwargs) -> QuerySet:
         query_set: QuerySet = super().get_queryset(*args, **kwargs)
         query_set = query_set.filter(is_published=True)
+        query_set = query_set.select_related('author', 'category')
 
         return query_set
 
@@ -134,6 +138,37 @@ class RecipeDetailsView(DetailView):
         )
 
         return context
+
+
+class RecipeListViewApi(RecipeHomeBase):
+    template_name = 'recipes/pages/home.html'
+
+    def render_to_response(self, *args, **kwargs) -> JsonResponse:
+        recipes = self.get_context_data()['recipes']
+        recipes_list: Dict = recipes.object_list.values()
+
+        return JsonResponse(
+            list(recipes_list),
+            safe=False,
+        )
+
+
+class RecipeListViewDetailsApi(RecipeDetailsView):
+    def render_to_response(self, *args, **kwargs) -> JsonResponse:
+        recipe = self.get_context_data()['recipe']
+        recipe_dict: Dict = model_to_dict(recipe)
+
+        del recipe_dict['preparation_steps_is_html']
+        del recipe_dict['is_published']
+
+        if recipe_dict.get('cover'):
+            recipe_dict['cover'] = (self.request.build_absolute_uri() +
+                                    recipe_dict['cover'].url[1:])
+
+        return JsonResponse(
+            recipe_dict,
+            safe=False,
+        )
 
 
 # def recipe(request, id) -> render:
