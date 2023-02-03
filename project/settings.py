@@ -31,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "INSECURE")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True if os.environ.get("DEBUG") == '0' else False
 
 ALLOWED_HOSTS: list[str] = ['*']
 
@@ -156,10 +156,6 @@ MESSAGE_TAGS = {
     constants.WARNING: 'message-warning',
 }
 
-<<<<<<< HEAD
-CSRF_TRUSTED_ORIGINS = ['https://recipes.devguilhermecosta.com']
-=======
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
->>>>>>> 5b5b3a995ced92c26efe93bb4230fe282f414a7b
