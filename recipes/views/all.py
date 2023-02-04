@@ -1,5 +1,6 @@
 import os
 from django.http import Http404
+from django.shortcuts import render
 from django.db.models import Q
 from utils.pagination import make_pagination
 from django.views.generic import ListView, DetailView
@@ -170,6 +171,20 @@ class RecipeListViewDetailsApi(RecipeDetailsView):
             safe=False,
         )
 
+
+def theory(request, *args, **kwargs) -> render:
+    recipes: Recipe = Recipe.objects.all().order_by('-id')
+    recipes_list: list = recipes[0:10]
+
+    context: dict = {
+        'recipes': recipes_list,
+    }
+
+    return render(
+        request,
+        'recipes/pages/theory.html',
+        context=context,
+    )
 
 # def recipe(request, id) -> render:
 #     recipe: Recipe = get_object_or_404(Recipe,
