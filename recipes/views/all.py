@@ -9,6 +9,7 @@ from django.db.models.query import QuerySet
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from typing import Dict
+from tag.models import Tag
 
 
 PER_PAGE = os.environ.get("PER_PAGE", 9)
@@ -25,6 +26,7 @@ class RecipeHomeBase(ListView):
         query_set: QuerySet = super().get_queryset(*args, **kwargs)
         query_set = query_set.filter(is_published=True)
         query_set = query_set.select_related('author', 'category')
+        query_set = query_set.prefetch_related('tags')
 
         return query_set
 
@@ -185,6 +187,34 @@ def theory(request, *args, **kwargs) -> render:
         'recipes/pages/theory.html',
         context=context,
     )
+
+
+class RecipeTag(RecipeHomeBase):
+    template_name = 'recipes/pages/tags.html'
+
+    def get_queryset(self, *args, **kwargs) -> None:
+        query_set = super().get_queryset(*args, **kwargs)
+        query_set = query_set.filter(tags__slug=self.kwargs.get('slug', ''))
+
+        return query_set
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        page_title = Tag.objects.filter(
+            slug=self.kwargs.get('slug', '')
+            ).first()
+
+        if not page_title:
+            page_title = 'No recipes found'
+
+        context.update(
+            {
+                'page_title': page_title,
+            }
+        )
+
+        return context
+
 
 # def recipe(request, id) -> render:
 #     recipe: Recipe = get_object_or_404(Recipe,

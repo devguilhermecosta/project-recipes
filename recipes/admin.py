@@ -1,17 +1,9 @@
 from django.contrib import admin
-from django.contrib.contenttypes.admin import GenericStackedInline
 from .models import Category, Recipe
-from tag.models import Tag
 
 
 class CategoryAdmin(admin.ModelAdmin):
     ...
-
-
-class TagInline(GenericStackedInline):
-    model = Tag
-    fields = 'name',
-    extra = 1
 
 
 @admin.register(Recipe)
@@ -46,10 +38,8 @@ class RecipeAdmin(admin.ModelAdmin):
         'slug': ['title'],
     }
 
-    # relacionamentos genéricos
-    inlines = [
-        TagInline,
-    ]
+    # autocomplete_fields
+    autocomplete_fields = 'tags',
 
 
 admin.site.register(Category, CategoryAdmin)
