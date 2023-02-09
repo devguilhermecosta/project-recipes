@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

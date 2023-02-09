@@ -7,7 +7,7 @@ from selenium.webdriver import ChromeOptions
 from time import sleep
 from pathlib import Path
 
-ROOT_PATH = Path(__file__).parent.parent  # raiz do projeto
+ROOT_PATH = Path(__file__).parent.parent.parent  # raiz do projeto
 
 if sys.platform == 'linux':
     CHROMEDRIVER_NAME = 'chromedriver_linux'  # passamos o nome do driver a ser usado  # noqa: E501
