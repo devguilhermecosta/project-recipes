@@ -11,7 +11,7 @@ SECRET_KEY = ''
 DEBUG = 0
 
 # list of hosts
-ALLOWED_HOSTS = " "
+ALLOWED_HOSTS = ""
 
 # Used for set the unsafe subdomain
 CSRF_TRUSTED_ORIGINS = ''
