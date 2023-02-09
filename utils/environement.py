@@ -23,7 +23,3 @@ def convert_str_to_list(env_variable: str) -> list:
         ]
 
     return data_list
-
-
-new_var = convert_str_to_list('ALLOWED_HOSTS')
-...
