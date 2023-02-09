@@ -32,6 +32,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "INSECURE")
 DEBUG = True if os.environ.get("DEBUG") == '0' else False
 
 ALLOWED_HOSTS: list[str] = convert_str_to_list('ALLOWED_HOSTS')
+CSRF_TRUSTED_ORIGINS: list[str] = convert_str_to_list('CSRF_TRUSTED_ORIGINS')
 
 # Application definition
 
