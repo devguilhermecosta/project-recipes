@@ -13,6 +13,9 @@ DEBUG = 0
 # list of hosts
 ALLOWED_HOSTS = ""
 
+# Used for set the unsafe subdomain
+CSRF_TRUSTED_ORIGINS = ''
+
 # 1 = True, 0 = False
 SELENIUM_HEADLESS = 1
 
