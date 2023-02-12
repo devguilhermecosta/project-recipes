@@ -7,7 +7,6 @@ from django.utils.translation import gettext_lazy as _
 from project.settings import MEDIA_ROOT
 from PIL import Image
 import os
-from pathlib import Path
 
 
 class Category(models.Model):
