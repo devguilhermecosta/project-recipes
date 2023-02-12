@@ -1,0 +1,15 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Profile |{% endblock title %}
+
+{% block content %}
+
+<div class="form-container center-flex">
+    <h1>{{ form_title }}</h1>
+    <h2>Username: {{ profile.author.username }}</h2>
+    <p>{{ profile.bio }}</p>
+</div>
+
+{% include 'global/partials/messages.html' %}
+
+{% endblock content %}
