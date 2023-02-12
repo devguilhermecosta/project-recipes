@@ -8,6 +8,8 @@ from recipes.models import Recipe
 from django.db.models.query import QuerySet
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
+from django.utils import translation
+from django.utils.translation import gettext as _
 from typing import Dict
 from tag.models import Tag
 
@@ -33,6 +35,8 @@ class RecipeHomeBase(ListView):
     def get_context_data(self, *args, **kwargs) -> dict:
         context: dict = super().get_context_data(*args, **kwargs)
 
+        html_language: str = translation.get_language()
+
         page_object, pagination_range = make_pagination(
             self.request,
             context.get('recipes'),
@@ -42,6 +46,7 @@ class RecipeHomeBase(ListView):
         context.update({
             'recipes': page_object,
             'pagination_range': pagination_range,
+            'html_language': html_language,
         })
 
         return context
@@ -66,10 +71,11 @@ class RecipeCategory(RecipeHomeBase):
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
         ctx_recipe = context.get('recipes')
+        category_translate: str = _('Category')
 
         context.update(
             {
-                'title': f"{ctx_recipe[0].category.name} - Category",
+                'title': f"{ctx_recipe[0].category.name} - {category_translate}",  # noqa
             }
         )
 

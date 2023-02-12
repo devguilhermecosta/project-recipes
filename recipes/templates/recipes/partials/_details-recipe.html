@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <!-- image card -->
 {% if recipe.cover %}
     <a href="{% url 'recipes:recipe' recipe.id %}">
@@ -60,12 +62,12 @@
 <section class="box-card-preparation">
     <!-- time of preparation -->
     <div class="card-time-preparation">
-        <h3><span class="material-icons">&#xe8b5</span>Preparo</h3>
+        <h3><span class="material-icons">&#xe8b5</span>{% translate 'Preparation' %}</h3>
         <p>{{ recipe.preparation_time }} {{ recipe.preparation_time_unit }}</p>
     </div>
     <!-- portions -->
     <div class="card-portion">
-        <h3><span class="material-icons">&#xe552</span>Porções</h3>
+        <h3><span class="material-icons">&#xe552</span>{% translate 'Servings' %}</h3>
         <p>{{ recipe.servings }} {{ recipe.servings_unit }}</p>
     </div>
 </section>
