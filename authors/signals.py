@@ -9,6 +9,8 @@ User = get_user_model()
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, *args, **kwargs) -> None:
+    # checa se o perfil não está criado ainda.
+    # se created for true, o perfil será criado, senão, atualizado.
     if created:
-        profile = Profile.objects.create(author=instance)
-        profile.save()
+        profile = Profile.objects.create(author=instance)  # linka o usuário ao perfil  # noqa: E501
+        profile.save()  # salva o perfil

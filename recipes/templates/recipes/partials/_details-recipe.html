@@ -13,14 +13,27 @@
     <div class="card-details">
         <!-- user -->
         {% if recipe.author is not None %}
-            <div>
-                <span class="material-icons card-user-icon">person</span>
-                {% if recipe.author.first_name %}
-                    <span class="card-username">{{ recipe.author.first_name }} {{recipe.author.last_name}}</span>
-                {% else %}
-                    <span class="card-username">{{ recipe.author.username }}</span>
-                {% endif %}
-            </div>
+            {% if recipe.author.profile %}
+                <div>
+                    <a href="{% url 'authors:profile' recipe.author.profile.id %}">
+                        <span class="material-icons card-user-icon">person</span>
+                        {% if recipe.author.first_name %}
+                            <span class="card-username">{{ recipe.author.first_name }} {{recipe.author.last_name}}</span>
+                        {% else %}
+                            <span class="card-username">{{ recipe.author.username }}</span>
+                        {% endif %}
+                    </a>
+                </div>
+            {% else %}
+                <div>
+                    <span class="material-icons card-user-icon">person</span>
+                    {% if recipe.author.first_name %}
+                        <span class="card-username">{{ recipe.author.first_name }} {{recipe.author.last_name}}</span>
+                    {% else %}
+                        <span class="card-username">{{ recipe.author.username }}</span>
+                    {% endif %}
+                </div>
+            {% endif %}
         {% endif %}
         <!-- data -->
         <div>
